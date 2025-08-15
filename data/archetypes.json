@@ -1,45 +1,52 @@
 {
   "spices": [
-    { "key": "posh", "name": "Posh", "colorClass": "posh", "tagline": "Elegance and refined taste" },
-    { "key": "baby", "name": "Baby", "colorClass": "baby", "tagline": "Warmth and joyful charm" },
-    { "key": "sporty", "name": "Sporty", "colorClass": "sporty", "tagline": "Strength and momentum" },
-    { "key": "ginger", "name": "Ginger", "colorClass": "ginger", "tagline": "Conviction and visibility" },
-    { "key": "scary", "name": "Scary", "colorClass": "scary", "tagline": "Boldness and intensity" }
+    { "key": "posh",   "name": "Posh",   "colorClass": "posh",   "tagline": "Elegance, standards, quiet authority" },
+    { "key": "baby",   "name": "Baby",   "colorClass": "baby",   "tagline": "Warmth, care, joyful charm" },
+    { "key": "sporty", "name": "Sporty", "colorClass": "sporty", "tagline": "Drive, stamina, momentum" },
+    { "key": "ginger", "name": "Ginger", "colorClass": "ginger", "tagline": "Conviction, culture, visibility" },
+    { "key": "scary",  "name": "Scary",  "colorClass": "scary",  "tagline": "Boldness, intensity, presence" }
   ],
+
   "descriptions": {
-    "posh": "Posh stands for aspiration, refined taste, and visual authority. Calm confidence, minimalism, and the belief that presentation is power.",
-    "baby": "Baby embodies warmth, sincerity, and joy. Approachable, soothing, and community minded. Softness as strength.",
-    "sporty": "Sporty represents strength, resilience, and momentum. Action first, disciplined, team oriented, and fair play focused.",
-    "ginger": "Ginger signals conviction, visibility, and expressive intelligence. Values voice, culture, and principled courage.",
-    "scary": "Scary means unapologetic boldness and emotional intensity. Lives loudly, breaks moulds, and refuses to shrink."
+    "posh":   "Posh is elevated taste with calm confidence. You edit before you add, value quality over quantity, and believe presentation shapes outcomes. Your energy is composed and persuasive, not loud. People trust you to raise standards and keep focus.",
+    "baby":   "Baby is warmth that feels safe and sincere. You notice needs early, bring gentleness into busy rooms, and build community through small, consistent care. Your style uplifts without demanding attention. People relax around you and open up.",
+    "sporty": "Sporty is disciplined energy in motion. You like clear goals, fair play, and progress you can measure. Pressure focuses you rather than rattles you. People look to you when something important must actually get done.",
+    "ginger": "Ginger is expressive intelligence with principled voice. You love culture and conversation, and you bring ideas into the light so they can land. Curiosity is your anchor, clarity is your tool. People turn to you for context and meaning.",
+    "scary":  "Scary is unapologetic boldness with emotional voltage. You live fully, take creative risks, and are not afraid to be seen. Your presence changes the temperature of a room in seconds. People feel braver when you lead the way."
   },
+
   "resultBlurbs": {
-    "posh:posh": "Peak elegance and composure. You lead with standards, taste, and focus.",
-    "posh:baby": "Refined but warm. Luxury with a soft heart and welcoming energy.",
-    "posh:sporty": "Polished power in motion. You bring style to performance.",
-    "posh:ginger": "Political elegance. Principled views delivered with poise.",
-    "posh:scary": "Gothic glamour. You challenge rules with couture precision.",
-    "baby:posh": "Cute luxury. You comfort others while keeping high standards.",
-    "baby:baby": "Pure joy. Playful, kind, and the social glue of any group.",
-    "baby:sporty": "Bubbly competitor. Team spirit with a cheerful edge.",
-    "baby:ginger": "Feminist sweetheart. Advocacy through kindness and care.",
-    "baby:scary": "Punk princess. Soft aesthetics with a rebellious core.",
-    "sporty:posh": "Athletic refinement. You turn discipline into an art.",
-    "sporty:baby": "Approachable athlete. Friendly, energetic, and loyal.",
-    "sporty:sporty": "Peak athletic energy. Movement is your language.",
-    "sporty:ginger": "Activist athlete. You fight for fairness and access.",
-    "sporty:scary": "Fearless competitor. Thrives on challenge and risk.",
-    "ginger:posh": "Social justice with polish. You make ideas land.",
-    "ginger:baby": "Charming advocate. You persuade with warmth.",
-    "ginger:sporty": "Change in action. You push norms through performance.",
-    "ginger:ginger": "Pure conviction. Voice, culture, and intellectual fire.",
-    "ginger:scary": "Radical thinker. Bold style meets bold ideas.",
-    "scary:posh": "Couture rebel. High fashion troublemaker.",
-    "scary:baby": "Edgy cuteness. Tender heart with loud presence.",
-    "scary:sporty": "Adrenaline rebel. Stamina plus subversion.",
-    "scary:ginger": "Radical activist. Challenges systems and the dress code.",
-    "scary:scary": "Unfiltered. No compromise, pure alternative energy."
+    "posh:posh":     "Pure composure with quiet clout. You set the bar, keep it there, and make excellence look easy.",
+    "posh:baby":     "Refined with a soft centre. You pair high standards with welcome, so people feel guided not judged.",
+    "posh:sporty":   "Polish with pace. You bring elegant focus to performance and turn discipline into an art.",
+    "posh:ginger":   "Poise with a point of view. Your ideas land because the delivery is immaculate and clear.",
+    "posh:scary":    "Couture with bite. You bend rules with precision and hold a room without raising your voice.",
+
+    "baby:posh":     "Cute luxury with manners. You comfort while keeping standards high and everyone feels looked after.",
+    "baby:baby":     "Pure uplift. Kind, playful, and a natural hub for friendship and care.",
+    "baby:sporty":   "Cheerful competitor. You bring team spirit, steady encouragement, and healthy momentum.",
+    "baby:ginger":   "Gentle advocate. Warmth plus clear words make your persuasion land softly and well.",
+    "baby:scary":    "Tender rebel. Soft aesthetic, strong backbone, and surprising courage when it counts.",
+
+    "sporty:posh":   "Athletic refinement. You love structure, aim for mastery, and your results look effortless.",
+    "sporty:baby":   "Approachable athlete. Loyal, energetic, and great at lifting others as you move forward.",
+    "sporty:sporty": "Peak momentum. You think with your feet, thrive on practice, and finish what you start.",
+    "sporty:ginger": "Purpose in motion. Principles become practical because you turn talk into action.",
+    "sporty:scary":  "Fearless finisher. You relish challenge, bring stamina, and change the mood to go-time.",
+
+    "ginger:posh":   "Thought with polish. You frame ideas beautifully so people can hear and adopt them.",
+    "ginger:baby":   "Charming advocate. You connect first, then convince, and your care gives your words weight.",
+    "ginger:sporty": "Change with traction. You test ideas on the ground and build momentum others can join.",
+    "ginger:ginger": "Pure conviction. Culture, clarity, and bright intelligence shape how you show up.",
+    "ginger:scary":  "Bold thinker. Big feelings meet big ideas and you make room for both.",
+
+    "scary:posh":    "High fashion dissident. You subvert with elegance and make rule-breaking look considered.",
+    "scary:baby":    "Edgy sweetheart. Big presence, kind intent, and a talent for protecting what matters.",
+    "scary:sporty":  "Adrenaline leader. You bring courage plus endurance and you rally people to move.",
+    "scary:ginger":  "Radical connector. You challenge the script and give others permission to be real.",
+    "scary:scary":   "Unfiltered force. You take up space without apology and you change the weather in the room."
   },
+
   "questions": [
     {
       "text": "Your go-to outfit for feeling most yourself is:",
@@ -292,6 +299,7 @@
       ]
     }
   ],
+
   "bonus": [
     {
       "text": "Pick the motto that feels closest:",

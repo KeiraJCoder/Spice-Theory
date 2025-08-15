@@ -209,6 +209,23 @@ button:disabled{ opacity:.55; cursor:not-allowed; }
 .muted{ color: var(--muted); }
 .hidden{ display:none !important; }
 
+.highlight-primary {
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  background: linear-gradient(180deg, rgba(106,92,255,.08), rgba(255,255,255,.4));
+}
+
+.highlight-primary h3 {
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.highlight-primary p {
+  font-weight: 600;
+}
+
+
 /* ---------- Focus & motion ---------- */
 :focus-visible{ outline:none; box-shadow: var(--focus); border-radius:10px; }
 @media (prefers-reduced-motion: reduce){
