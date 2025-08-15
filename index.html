@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spice Theory Quiz</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Metadata for sharing -->
+  <meta name="description" content="Find your primary Spice type and secondary subtype with the Spice Theory Quiz." />
+  <meta property="og:title" content="Spice Theory Quiz" />
+  <meta property="og:description" content="Find your primary Spice type and secondary subtype with the Spice Theory Quiz." />
+  <meta property="og:type" content="website" />
+</head>
+<body>
+  <noscript>
+    <p>This quiz needs JavaScript to run.</p>
+  </noscript>
+
+  <div class="container" role="application">
+    <header class="site-header" aria-labelledby="app-title">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1 id="app-title">Spice Theory Personality Quiz</h1>
+        <p class="lede" id="app-lede">Find your primary spice type and your secondary subtype.</p>
+
+        <!-- The pillbar (Posh, Baby, Sporty, Ginger, Scary) will be rendered by JS from JSON -->
+        <div class="pillbar" id="pillbar" aria-hidden="true"></div>
+      </div>
+    </header>
+
+    <!-- Progress -->
+    <div class="progress" aria-live="polite" aria-atomic="true">
+      <div class="progressbar" aria-hidden="true">
+        <div id="bar"></div>
+      </div>
+      <div id="progressText" class="muted">Loading…</div>
+    </div>
+
+    <!-- Quiz section (JS will inject questions/options) -->
+    <section id="quiz" class="card" aria-labelledby="q-legend">
+      <form id="quizForm" autocomplete="off">
+        <fieldset>
+          <legend id="q-legend">Loading questions…</legend>
+          <div class="options" id="options"></div>
+        </fieldset>
+        <div class="controls">
+          <button type="button" class="secondary" id="backBtn" aria-label="Go to previous question">Back</button>
+          <div class="control-right">
+            <button type="button" class="secondary" id="skipBtn" aria-label="Skip this question">Skip</button>
+            <button type="button" id="nextBtn" aria-label="Go to next question">Next</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Tie-breaker section -->
+    <section id="bonus" class="card hidden" aria-labelledby="b-legend">
+      <fieldset>
+        <legend id="b-legend">Tie-breaker</legend>
+        <p class="muted">A few quick questions will help place you precisely.</p>
+        <div class="options" id="bonusOptions"></div>
+      </fieldset>
+      <div class="controls">
+        <button type="button" class="secondary" id="bonusBackBtn">Back</button>
+        <button type="button" id="bonusNextBtn">Next</button>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="result" class="card hidden" aria-live="polite" aria-atomic="true">
+      <div class="result">
+        <div id="resultBadges"></div>
+        <h2 id="resultTitle">Your Spice Type</h2>
+        <p id="resultBlurb"></p>
+        <div class="grid">
+          <div>
+            <h3>Primary type</h3>
+            <p id="primaryDesc" class="muted"></p>
+          </div>
+          <div>
+            <h3>Secondary subtype</h3>
+            <p id="secondaryDesc" class="muted"></p>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <p class="muted">Built for the web. No tracking or cookies.</p>
+      </footer>
+    </section>
+  </div>
+
+  <!-- App bootstrapping:
+       script.js will fetch archetypes.json and render:
+       - pillbar from spices[]
+       - 25 main questions + 3 bonus
+       - scoring, tie-breaker logic, and results
+  -->
+  <script src="script.js" defer></script>
+</body>
+</html>
