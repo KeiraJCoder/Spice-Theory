@@ -1,9 +1,12 @@
-/* script.js — Spice Theory Quiz (simplified)
+/* script.js — Spice Theory Quiz (simplified, fixed percentages)
    - Loads ./data/archetypes.json
    - Randomises questions per session and options per render
    - Editable selections; scoring at end
-   - Optional tie-breaker mini-quiz when needed
-   - Results show Secondary first, then Primary with percentages
+   - Bonus appears ONLY if top two are exactly tied after main questions
+   - Bonus choices are restricted to the two tied spices
+   - Results show Secondary first, then Primary
+   - Percentages are computed from RAW counts (main + bonus), no tie-break nudges
+   - Result blocks show an image for Primary and Secondary based on DATA.spices[*].image
 */
 (() => {
   // --------------------------
@@ -41,7 +44,7 @@
   let answers   = [];      // answers[i] = spiceKey | null
   let index     = 0;
 
-  let bonusQuestions = []; // tie-filtered + shuffled DATA.bonus
+  let bonusQuestions = []; // filtered to tied spices, shuffled
   let bonusAnswers   = []; // bonusAnswers[i] = spiceKey | null
   let bIndex         = 0;
   let inBonus        = false;
@@ -206,13 +209,14 @@
   function startBonus(tieSpices){
     inBonus = true;
 
+    // Restrict every bonus question to ONLY the tied spices
     bonusQuestions = DATA.bonus
       .map(q => ({ text: q.text, options: q.options.filter(o => tieSpices.includes(o.spice)) }))
       .filter(q => q.options.length >= 2);
 
     if (bonusQuestions.length === 0){
       inBonus = false;
-      showResult();
+      showResult(); // nothing to ask — go straight to result with deterministic resolver
       return;
     }
 
@@ -234,27 +238,19 @@
       return;
     }
 
-    // apply bonus weight and finish
+    // Apply bonus picks into scores used for ORDERING (NOT for % display)
     const scores = tallyScores();
     bonusAnswers.forEach(s => { if (s) scores[s] = (scores[s] || 0) + 1; });
 
-    // break any remaining ties deterministically
+    // Resolve only between the two tied spices
     const ordered = orderScores(scores);
     const topScore = ordered[0].score;
     const topTies = ordered.filter(s => s.score === topScore).map(s => s.key);
-    if (topTies.length > 1){
-      const pick = firstAppearance(topTies);
-      scores[pick] += 0.01;
-    }
 
-    const after = orderScores(scores);
-    const primary = after[0].key;
-    const rest = after.filter(s => s.key !== primary);
-    const secondScore = rest[0]?.score ?? -Infinity;
-    const secTies = rest.filter(s => s.score === secondScore).map(s => s.key);
-    if (secTies.length > 1){
-      const pick2 = firstAppearance(secTies, primary);
-      scores[pick2] += 0.005;
+    if (topTies.length > 1){
+      // Still tied after bonus — pick by earliest appearance in the main answers
+      const pick = firstAppearance(topTies);
+      scores[pick] += 0.0001; // microscopic nudge to break sort tie without affecting % display
     }
 
     showResult(scores);
@@ -275,6 +271,7 @@
   // --------------------------
   // SCORING
   // --------------------------
+  // Scores from MAIN answers only
   function tallyScores(){
     const scores = {};
     DATA.spices.forEach(s => { scores[s.key] = 0; });
@@ -282,19 +279,35 @@
     return scores;
   }
 
+  // RAW integer counts from MAIN + BONUS, no nudges (used for % display)
+  function rawCounts(){
+    const counts = {};
+    DATA.spices.forEach(s => { counts[s.key] = 0; });
+
+    // main answers
+    answers.forEach(a => { if (a) counts[a] += 1; });
+
+    // bonus answers (if any)
+    if (Array.isArray(bonusAnswers)){
+      bonusAnswers.forEach(a => { if (a) counts[a] += 1; });
+    }
+    return counts;
+  }
+
+  // Return [topKey, secondKey] ONLY if there is an exact tie for first place after main questions
   function computeAndCheckTies(){
-    const scores = tallyScores();
+    const scores  = tallyScores();
     const ordered = orderScores(scores);
 
-    const top = ordered[0]?.score ?? 0;
-    const topTies = ordered.filter(s => s.score === top).map(s => s.key);
-    if (topTies.length > 1) return topTies;
+    if (!ordered.length) return null;
 
-    const rest = ordered.slice(1);
-    const second = rest[0]?.score ?? -Infinity;
-    const secondTies = rest.filter(s => s.score === second).map(s => s.key);
-    if (secondTies.length > 1) return secondTies;
+    const top     = ordered[0];
+    const second  = ordered[1];
 
+    // Only trigger bonus if the top two are EXACTLY tied
+    if (second && top.score === second.score){
+      return [top.key, second.key];
+    }
     return null;
   }
 
@@ -311,14 +324,31 @@
   }
 
   function showResult(preComputed){
-    const scores  = preComputed || tallyScores();
+    // 1) ORDERING: use possibly nudged scores to decide primary and secondary
+    const scores  = preComputed || tallyScores(); // may have tiny nudge only to break sort
     const ordered = orderScores(scores);
 
-    const primary   = ordered[0]?.key ?? 'posh';
-    const secondary = ordered.find(s => s.key !== primary)?.key ?? primary;
+    let primary   = ordered[0]?.key ?? 'posh';
+    let secondary = ordered.find(s => s.key !== primary)?.key ?? primary;
 
     const pMeta = DATA.spices.find(s => s.key === primary);
     const sMeta = DATA.spices.find(s => s.key === secondary);
+
+    // 2) PERCENTAGES from RAW counts (main + bonus), NO nudges
+    const raw = rawCounts();
+    const totalAnswered = Object.values(raw).reduce((a, b) => a + b, 0) || 1;
+    const pct = x => Math.round((x / totalAnswered) * 100);
+
+    // Pure result = ONLY one spice scored at all
+    const isPure = (ordered[1]?.score ?? 0) === 0;
+
+    // If pure, collapse to one card and force 100%
+    const pPct = isPure ? 100 : pct(raw[primary]   || 0);
+    const sPct = isPure ? 0   : pct(raw[secondary] || 0);
+
+    if (isPure){
+      secondary = primary; // for specialName + blurb key
+    }
 
     const comboKey = `${primary}:${secondary}`;
     const blurb    = DATA.resultBlurbs[comboKey] || '';
@@ -326,16 +356,16 @@
       ? specialName(primary, secondary)
       : `${cap(secondary)} ${cap(primary)}`;
 
-    // percentages from answered items only
-    const totalAnswered = Object.values(scores).reduce((a, b) => a + b, 0) || 1;
-    const pct = x => Math.round((x / totalAnswered) * 100);
-    const pPct = pct(scores[primary]   || 0);
-    const sPct = pct(scores[secondary] || 0);
+    // Pills
+    if (isPure){
+      resultBadges.innerHTML = `<span class="badge pill"><strong>${pMeta.name} 100%</strong></span>`;
+    } else {
+      resultBadges.innerHTML =
+        `<span class="badge pill">${sMeta.name} ${sPct}%</span>` +
+        `<span class="badge pill"><strong>${pMeta.name} ${pPct}%</strong></span>`;
+    }
 
-    resultBadges.innerHTML =
-      `<span class="badge pill">${sMeta.name} ${sPct}%</span>` +
-      `<span class="badge pill"><strong>${pMeta.name} ${pPct}%</strong></span>`;
-
+    // Titles and copy
     resultTitle.textContent = title;
     resultBlurb.textContent = blurb;
 
@@ -371,8 +401,9 @@
       if (!res) { alert('Take the quiz first'); return; }
 
       const shareURL = buildShareURL(res.primary, res.secondary, res.pPct, res.sPct);
-      const text = `My Spice Theory result: ${nameOf(res.primary)} with ${nameOf(res.secondary)}. `
-                 + `${res.pPct}% / ${res.sPct}%\n${shareURL}`;
+      const text = isPure
+        ? `My Spice Theory result: ${nameOf(res.primary)} — 100%\n${shareURL}`
+        : `My Spice Theory result: ${nameOf(res.primary)} with ${nameOf(res.secondary)}. ${res.pPct}% / ${res.sPct}%\n${shareURL}`;
       try{
         if (navigator.share){
           await navigator.share({ title: 'Spice Theory result', text, url: shareURL });
@@ -397,14 +428,44 @@
     const primaryH3      = primaryBlock.querySelector('h3');
     const secondaryH3    = secondaryBlock.querySelector('h3');
 
-    secondaryH3.textContent = `Secondary subtype (${sPct}%)`;
-    primaryH3.textContent   = `Primary type (${pPct}%)`;
+    if (isPure){
+      setHidden(secondaryBlock, true);
+      primaryH3.textContent = `Your type (100%)`;
+    } else {
+      setHidden(secondaryBlock, false);
+      secondaryH3.textContent = `Secondary subtype (${sPct}%)`;
+      primaryH3.textContent   = `Primary type (${pPct}%)`;
 
-    if (grid && secondaryBlock !== grid.firstElementChild){
-      grid.insertBefore(secondaryBlock, grid.firstElementChild);
-      grid.appendChild(primaryBlock);
+      if (grid && secondaryBlock !== grid.firstElementChild){
+        grid.insertBefore(secondaryBlock, grid.firstElementChild);
+        grid.appendChild(primaryBlock);
+      }
     }
+
+    // Visual emphasis + colour per spice
     primaryBlock.classList.add('highlight-primary');
+    primaryBlock.classList.remove('posh','baby','sporty','ginger','scary');
+    primaryBlock.classList.add(pMeta?.colorClass || primary);
+
+    // insert images
+    function upsertImage(block, meta){
+      if (!block || !meta) return;
+      let img = block.querySelector('.result-img');
+      if (!img){
+        img = document.createElement('img');
+        img.className = 'result-img';
+        img.loading = 'lazy';
+        block.insertBefore(img, block.firstChild);
+      }
+      img.src = meta.image || '';
+      img.alt = meta.name || 'Result image';
+    }
+    upsertImage(primaryBlock, pMeta);
+    if (!isPure){
+      upsertImage(secondaryBlock, sMeta);
+    }
+
+    // emphasise primary copy
     primaryDesc.innerHTML = `<strong>${primaryDesc.textContent}</strong>`;
 
     setHidden(quizSec,  true);
@@ -421,10 +482,24 @@
   function startQuiz(data){
     DATA = data;
 
+    // Warm the cache for result images
+    (DATA.spices || []).forEach(s => {
+      if (s.image){
+        const i = new Image();
+        i.src = s.image;
+      }
+    });
+
     questions = DATA.questions.slice();
     shuffle(questions);
     answers = Array(questions.length).fill(null);
     index = 0;
+
+    // reset any previous bonus state
+    bonusQuestions = [];
+    bonusAnswers   = [];
+    bIndex = 0;
+    inBonus = false;
 
     setHidden(resultSec, true);
     setHidden(bonusSec,  true);
@@ -450,4 +525,9 @@
       console.error(err);
       progressText.textContent = 'Error loading quiz data.';
     });
+
+  function getSpice(key){
+    return DATA?.spices?.find(s => s.key === key) || null;
+  }
+
 })();

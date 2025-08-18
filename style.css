@@ -396,6 +396,79 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 
 #resultBlurb { color: var(--muted); }
 
+/* make both result columns equal width */
+#result .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* uniform image box for both results */
+.result-img {
+  display: block;
+  width: 100%;
+  height: 320px;         /* uniform height */
+  object-fit: cover;     /* fill box, may crop */
+  object-position: top;  /* always show top edge */
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* Map spice classes to the highlight colour (same as name-strip) */
+.highlight-primary.ginger { --hi: #ff7b00; }  /* Ginger */
+.highlight-primary.baby   { --hi: #ff7ab6; }  /* Baby   */
+.highlight-primary.scary  { --hi: #f0e857; }  /* Scary  */
+.highlight-primary.sporty { --hi: #2b6eff; }  /* Sporty */
+.highlight-primary.posh   { --hi: #000000; }  /* Posh   */
+
+
+/* Primary card visuals use --hi, which we set per spice */
+.highlight-primary {
+  /* default/fallback */
+  --hi: var(--accent);
+
+  border: 2px solid var(--hi);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+
+  /* soft tint using the chosen colour */
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--hi) 14%, transparent),
+      rgba(255, 255, 255, 0.40)
+    );
+}
+
+.highlight-primary h3 {
+  font-weight: 800;
+  color: var(--hi);
+}
+
+.highlight-primary p { font-weight: 600; }
+
+/* Fallback if color-mix() is unsupported */
+@supports not (color: color-mix(in srgb, white, black)) {
+  .highlight-primary {
+    background:
+      linear-gradient(180deg, rgba(106, 92, 255, 0.14), rgba(255,255,255,0.40));
+  }
+}
+
+/* When only one result card is visible (pure/double) */
+#result .grid:only-child,
+#result .grid:has(.hidden) {
+  grid-template-columns: 1fr;
+  justify-items: center;   /* centre the single card */
+}
+
+#result .grid:has(.hidden) > div:not(.hidden) {
+  max-width: 480px;        /* optional, keeps it tidy */
+  margin: 0 auto;
+}
+
+
 .badge.pill {
   display: inline-block;
   padding: 8px 12px;
@@ -415,17 +488,6 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 .muted { color: var(--muted); }
 .hidden { display: none !important; }
 
-.highlight-primary {
-  border: 2px solid var(--accent);
-  border-radius: var(--radius-sm);
-  padding: 8px;
-  background: linear-gradient(180deg, rgba(106, 92, 255, 0.08), rgba(255, 255, 255, 0.4));
-}
-
-.highlight-primary h3 {
-  font-weight: 800;
-  color: var(--accent);
-}
 
 .highlight-primary p { font-weight: 600; }
 
