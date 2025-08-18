@@ -8,27 +8,11 @@
     - Spice font applied to H1 (loaded from /assets)
    ================================ */
 
-/* --------------------------------
-    0) Custom font: "Spice"
-   -------------------------------- */
-@font-face {
-  font-family: 'Spice';
-  src:
-    local('Spice'),
-    url('/assets/Spice.ttf') format('truetype');
-  font-display: swap;
-}
-
 /* ================================
    0) CUSTOM FONT: SPICE
    - The "Spice" TTF only ships uppercase A–Z.
    - We add a 'SpiceCaps' face limited to A–Z to allow smart fallback (Fix 2).
    ================================ */
-@font-face{
-  font-family: "Spice";
-  src: url("/assets/Spice.ttf") format("truetype");
-  font-display: swap;
-}
 
 /* Uppercase-only slice for smart fallback (used in Fix 2) */
 @font-face{
@@ -55,8 +39,6 @@
   line-height: 1.1;
   font-weight: 700;            /* Spice is display-y; keep weight modest */
 }
-
-
 
 /* --------------------------------
     1) Design tokens
@@ -144,7 +126,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('/assets/spice-girls-hero-home.jpg');
+  background-image: url('./assets/spice-girls-hero-home.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 18%;
