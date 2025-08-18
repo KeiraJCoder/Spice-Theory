@@ -196,7 +196,7 @@ body {
   font-weight: 800;
   font-size: 1rem;
 }
-.names-strip .name:nth-child(1) { left: 14%; }   /* Ginger */
+.names-strip .name:nth-child(1) { left: 14%; }  /* Ginger */
 .names-strip .name:nth-child(2) { left: 32%; }  /* Baby */
 .names-strip .name:nth-child(3) { left: 47%; }  /* Scary */
 .names-strip .name:nth-child(4) { left: 65%; }  /* Sporty */
@@ -294,11 +294,34 @@ legend {
   transition: transform 0.08s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
+/* >>> RADIO BUTTON — refreshed look (only this block changed/extended) */
 .option input[type='radio'] {
   margin-top: 3px;
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: box-shadow .2s ease, transform .12s ease, border-color .2s ease, background .2s ease;
+}
+
+.option input[type='radio']:hover {
+  box-shadow: 0 0 0 4px rgba(106, 92, 255, 0.12);
+}
+
+.option input[type='radio']:focus-visible {
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.option input[type='radio']:checked {
+  border-color: transparent;
+  background: radial-gradient(circle at 50% 50%,
+              var(--accent) 0%, var(--accent-2) 60%, var(--accent-3) 100%);
+  box-shadow: 0 0 0 4px rgba(106, 92, 255, 0.18);
+  transform: scale(0.98);
 }
 
 .option span { line-height: 1.35; }
