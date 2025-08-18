@@ -1,5 +1,5 @@
 /* ================================
-    Spice Theory — style.css (revamp, spaces-only)
+    Spice Theory - style.css (revamp, spaces-only)
     - Neutral option styling (no spice colours)
     - Modern, lively visuals
     - Keyboard & screen-reader friendly
@@ -29,7 +29,7 @@
 }
 
 /* ================================
-   TITLE — FIX 1 (ACTIVE)
+   TITLE - FIX 1 (ACTIVE)
    Make the title uppercase so every character exists in Spice.
    ================================ */
 #app-title{
@@ -294,7 +294,7 @@ legend {
   transition: transform 0.08s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
-/* >>> RADIO BUTTON — refreshed look (only this block changed/extended) */
+/* >>> RADIO BUTTON - refreshed look (only this block changed/extended) */
 .option input[type='radio'] {
   margin-top: 3px;
   width: 20px;

@@ -8,328 +8,405 @@
   ],
 
   "descriptions": {
-    "posh":   "Posh is elevated taste with calm confidence. You edit before you add, value quality over quantity, and believe presentation shapes outcomes. Your energy is composed and persuasive, not loud. People trust you to raise standards and keep focus.",
-    "baby":   "Baby is warmth that feels safe and sincere. You notice needs early, bring gentleness into busy rooms, and build community through small, consistent care. Your style uplifts without demanding attention. People relax around you and open up.",
-    "sporty": "Sporty is disciplined energy in motion. You like clear goals, fair play, and progress you can measure. Pressure focuses you rather than rattles you. People look to you when something important must actually get done.",
-    "ginger": "Ginger is expressive intelligence with principled voice. You love culture and conversation, and you bring ideas into the light so they can land. Curiosity is your anchor, clarity is your tool. People turn to you for context and meaning.",
-    "scary":  "Scary is unapologetic boldness with emotional voltage. You live fully, take creative risks, and are not afraid to be seen. Your presence changes the temperature of a room in seconds. People feel braver when you lead the way."
+    "posh":   "Posh is composed, exacting, and quietly powerful. You notice details others miss, you edit before you add, and you believe everything should serve a purpose. Style is not decoration for you, it is strategy. People turn to you to keep things sharp, elevated, and under control.",
+
+    "baby":   "Baby is soft on the surface but strong underneath. You bring comfort into busy rooms, you notice needs before they are spoken, and you make kindness feel like a form of leadership. People open up around you because they feel safe in your presence, and they stay because your warmth has real strength behind it.",
+
+    "sporty": "Sporty is drive made visible. You thrive on goals, progress, and the buzz of being in motion. Discipline does not restrict you, it frees you to push further. Pressure sharpens you instead of shaking you. People rely on you when they need someone to cut through distraction and get things done.",
+
+    "ginger": "Ginger is intelligence on fire. You love culture, conversation, and bold ideas, and you always find the words others are searching for. Curiosity is your anchor, clarity is your tool. People come to you for context, insight, and the courage to say what needs to be said.",
+
+    "scary":  "Scary is intensity with heart. You live out loud, take risks others would never dare, and refuse to shrink yourself. Your energy can flip the mood of a whole room in seconds. People feel braver, wilder, and freer when you are there, because you show them what it means to live unapologetically."
   },
 
+
   "resultBlurbs": {
-    "posh:posh":     "Pure composure with quiet clout. You set the bar, keep it there, and make excellence look easy.",
-    "posh:baby":     "Refined with a soft centre. You pair high standards with welcome, so people feel guided not judged.",
-    "posh:sporty":   "Polish with pace. You bring elegant focus to performance and turn discipline into an art.",
-    "posh:ginger":   "Poise with a point of view. Your ideas land because the delivery is immaculate and clear.",
-    "posh:scary":    "Couture with bite. You bend rules with precision and hold a room without raising your voice.",
+    "posh:posh":   "You are composed and exacting. You notice details others overlook, you keep standards high, and you never lose your calm. People look to you as the one who sets the bar for everyone else.",
+    "posh:baby":   "You are graceful but warm. You carry refinement without arrogance, and people feel both cared for and motivated in your company. You show that kindness and standards belong together.",
+    "posh:sporty": "You are sharp and driven. You chase goals with discipline, you keep your edge under pressure, and you prove that elegance and stamina can go hand in hand. People admire how you deliver with style.",
+    "posh:ginger": "You are stylish with substance. Your words carry weight because you deliver them with clarity, and your point of view lands cleanly. People listen because you frame ideas with both wit and polish.",
+    "posh:scary":  "You are refined but fearless. You bend rules with precision, you command respect without raising your voice, and people feel your authority even in silence.",
 
-    "baby:posh":     "Cute luxury with manners. You comfort while keeping standards high and everyone feels looked after.",
-    "baby:baby":     "Pure uplift. Kind, playful, and a natural hub for friendship and care.",
-    "baby:sporty":   "Cheerful competitor. You bring team spirit, steady encouragement, and healthy momentum.",
-    "baby:ginger":   "Gentle advocate. Warmth plus clear words make your persuasion land softly and well.",
-    "baby:scary":    "Tender rebel. Soft aesthetic, strong backbone, and surprising courage when it counts.",
+    "baby:posh":   "You are gentle but refined. You soften sharp edges, you notice details others miss, and you make high standards feel kind instead of intimidating. People trust you to keep things graceful and fair.",
+    "baby:baby":   "You are warmth in its purest form. Playful, caring, and approachable, you draw people in without effort. Friends know you as the one who makes every space feel safe and light.",
+    "baby:sporty": "You are encouraging and full of spirit. You thrive in groups, keep momentum going, and celebrate progress out loud. People look to you when they need both energy and reassurance.",
+    "baby:ginger": "You are caring but not naive. You lead with kindness, you stand by your beliefs, and you persuade by making people feel understood. People value your softness as much as your strength.",
+    "baby:scary":  "You are tender but unafraid. You carry a gentle style, yet when something matters you show a fierce backbone. People are surprised by your courage, but it always comes from love.",
 
-    "sporty:posh":   "Athletic refinement. You love structure, aim for mastery, and your results look effortless.",
-    "sporty:baby":   "Approachable athlete. Loyal, energetic, and great at lifting others as you move forward.",
-    "sporty:sporty": "Peak momentum. You think with your feet, thrive on practice, and finish what you start.",
-    "sporty:ginger": "Purpose in motion. Principles become practical because you turn talk into action.",
-    "sporty:scary":  "Fearless finisher. You relish challenge, bring stamina, and change the mood to go-time.",
+    "sporty:posh":   "You are disciplined and stylish at once. You like structure, you aim high, and you make pushing for excellence look effortless. People respect how you balance ambition with composure.",
+    "sporty:baby":   "You are the encourager who keeps things moving. Loyal, energetic, and approachable, you make progress feel fun and people feel supported just by being on your team.",
+    "sporty:sporty": "You are unstoppable when you find your rhythm. Practice excites you, progress fuels you, and you will always finish what you start. People admire your stamina and drive.",
+    "sporty:ginger": "You are purposeful in motion. Your principles guide your effort, and you prove your beliefs by putting them into practice. People know your energy always has meaning behind it.",
+    "sporty:scary":  "You are bold under pressure. Challenge brings out your courage, you thrive on competition, and your intensity turns nerves into excitement. People move faster when you lead the charge.",
 
-    "ginger:posh":   "Thought with polish. You frame ideas beautifully so people can hear and adopt them.",
-    "ginger:baby":   "Charming advocate. You connect first, then convince, and your care gives your words weight.",
-    "ginger:sporty": "Change with traction. You test ideas on the ground and build momentum others can join.",
-    "ginger:ginger": "Pure conviction. Culture, clarity, and bright intelligence shape how you show up.",
-    "ginger:scary":  "Bold thinker. Big feelings meet big ideas and you make room for both.",
+    "ginger:posh":   "You are clever and composed, with a way of turning sharp ideas into something elegant and persuasive. People listen because you bring wit and polish in equal measure.",
+    "ginger:baby":   "You are warm but principled. You speak with care, you draw people in with charm, and you change minds gently but firmly. People remember how you made them feel safe while telling the truth.",
+    "ginger:sporty": "You are restless for progress. You test your ideas in real life, push them into motion, and prove your beliefs through action. People follow you because you show that conviction can move fast.",
+    "ginger:ginger": "You are pure spark. Bright, articulate, and curious, you thrive on culture and conversation. People look to you to name what matters and to give words to feelings they could not pin down themselves.",
+    "ginger:scary":  "You are fire with focus. Your emotions and your principles are both loud, and you never hide either. People admire how you make room for honesty in its rawest form.",
 
-    "scary:posh":    "High fashion dissident. You subvert with elegance and make rule-breaking look considered.",
-    "scary:baby":    "Edgy sweetheart. Big presence, kind intent, and a talent for protecting what matters.",
-    "scary:sporty":  "Adrenaline leader. You bring courage plus endurance and you rally people to move.",
-    "scary:ginger":  "Radical connector. You challenge the script and give others permission to be real.",
-    "scary:scary":   "Unfiltered force. You take up space without apology and you change the weather in the room."
+    "scary:posh":   "You are striking and impossible to overlook. Your style is sharp, your presence is bold, yet every move feels intentional. People see a rebel who knows exactly what they are doing.",
+    "scary:baby":   "You are big-hearted and big-voiced. You step in to protect, you soften the edges when needed, and you make courage feel safe. People lean on you because you can roar and nurture at the same time.",
+    "scary:sporty": "You are relentless energy with a competitive edge. You chase challenge, thrive on risk, and turn tension into fuel. People feel their own pulse quicken when you walk in the room.",
+    "scary:ginger": "You are a truth-teller with presence. You speak what others are afraid to say, and your intensity makes people listen. People follow because you make honesty feel powerful rather than risky.",
+    "scary:scary":  "You are pure force of nature. Loud, magnetic, and unapologetic, you do not just enter a room, you change its atmosphere. People feel braver just standing beside you."
+
   },
 
   "questions": [
-    {
-      "text": "Your go-to outfit for feeling most yourself is:",
-      "options": [
-        { "label": "Sleek, tailored, timeless pieces that turn heads", "spice": "posh" },
-        { "label": "Soft pastels and playful, cute details", "spice": "baby" },
-        { "label": "Sporty gear or comfortable activewear", "spice": "sporty" },
-        { "label": "Eclectic, expressive clothes with a story", "spice": "ginger" },
-        { "label": "Bold patterns and daring accessories", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "If you could redesign your bedroom tomorrow, it would be:",
-      "options": [
-        { "label": "Minimalist chic, with luxury textures", "spice": "posh" },
-        { "label": "Cosy, colourful, and full of keepsakes", "spice": "baby" },
-        { "label": "Functional, open, and ready for activity", "spice": "sporty" },
-        { "label": "Lined with books, art, and conversation pieces", "spice": "ginger" },
-        { "label": "Dark, moody, with pops of dramatic flair", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your dream holiday wardrobe is:",
-      "options": [
-        { "label": "Designer resort wear, perfectly curated", "spice": "posh" },
-        { "label": "Light, cute, and perfect for photo moments", "spice": "baby" },
-        { "label": "Practical, athletic, and adventure ready", "spice": "sporty" },
-        { "label": "Comfortable and versatile, with a few bold pieces", "spice": "ginger" },
-        { "label": "Loud, unconventional, and guaranteed to stand out", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "What colour palette feels most like you?",
-      "options": [
-        { "label": "Neutrals, black, and white, timeless elegance", "spice": "posh" },
-        { "label": "Soft pinks, creams, and pastels", "spice": "baby" },
-        { "label": "Bright primary colours with energy", "spice": "sporty" },
-        { "label": "Warm earth tones with vibrant accents", "spice": "ginger" },
-        { "label": "Deep darks mixed with electric pops", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your accessories say:",
-      "options": [
-        { "label": "I know quality when I see it", "spice": "posh" },
-        { "label": "I am here to brighten your day", "spice": "baby" },
-        { "label": "I am ready to move at any time", "spice": "sporty" },
-        { "label": "I have something to say", "spice": "ginger" },
-        { "label": "I refuse to blend in", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "At a party, you are most likely to:",
-      "options": [
-        { "label": "Keep things elegant and introduce people with ease", "spice": "posh" },
-        { "label": "Make sure everyone feels included and comfy", "spice": "baby" },
-        { "label": "Start a game or get a dance circle going", "spice": "sporty" },
-        { "label": "Spark meaningful conversations", "spice": "ginger" },
-        { "label": "Turn up the energy and push the vibe higher", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your friends rely on you for:",
-      "options": [
-        { "label": "Tasteful advice and high standards", "spice": "posh" },
-        { "label": "Comfort, kindness, and check-ins", "spice": "baby" },
-        { "label": "Motivation and accountability", "spice": "sporty" },
-        { "label": "Honest perspective and advocacy", "spice": "ginger" },
-        { "label": "Courage to do bold things", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "When you first meet someone, your vibe is:",
-      "options": [
-        { "label": "Poised and self-contained", "spice": "posh" },
-        { "label": "Warm and approachable", "spice": "baby" },
-        { "label": "Energetic and direct", "spice": "sporty" },
-        { "label": "Curious and thoughtful", "spice": "ginger" },
-        { "label": "Magnetic and intense", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your preferred way to show care is:",
-      "options": [
-        { "label": "Raising the bar for both of us", "spice": "posh" },
-        { "label": "Small acts of kindness and attention", "spice": "baby" },
-        { "label": "Active support, showing up in person", "spice": "sporty" },
-        { "label": "Listening deeply and standing up for you", "spice": "ginger" },
-        { "label": "Defending you loudly if needed", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "In a team, your natural role is:",
-      "options": [
-        { "label": "Quality control and final polish", "spice": "posh" },
-        { "label": "Morale booster and community builder", "spice": "baby" },
-        { "label": "Driver of action and momentum", "spice": "sporty" },
-        { "label": "Strategic voice and conscience", "spice": "ginger" },
-        { "label": "Boundary pusher and risk taker", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your ideal Saturday looks like:",
-      "options": [
-        { "label": "Fine food, a gallery, or a chic event", "spice": "posh" },
-        { "label": "Coffee with friends and a cosy film", "spice": "baby" },
-        { "label": "A match, a hike, or a workout", "spice": "sporty" },
-        { "label": "A talk, a bookshop, or a community activity", "spice": "ginger" },
-        { "label": "A gig, a bike ride, or trying something daring", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Pick the playlist that fits your mood:",
-      "options": [
-        { "label": "Contemporary R&B and sleek pop", "spice": "posh" },
-        { "label": "Bubblegum pop and feel-good hits", "spice": "baby" },
-        { "label": "High-energy anthems for movement", "spice": "sporty" },
-        { "label": "Indie, soulful, or politically aware tracks", "spice": "ginger" },
-        { "label": "Alt, punk, or big dramatic vocals", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Favourite way to travel:",
-      "options": [
-        { "label": "In style, well planned, and unflustered", "spice": "posh" },
-        { "label": "With friends, snacks, and good vibes", "spice": "baby" },
-        { "label": "On foot, by bike, or anything active", "spice": "sporty" },
-        { "label": "Where culture and history are rich", "spice": "ginger" },
-        { "label": "To places off the beaten track", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "The class you are most likely to sign up for:",
-      "options": [
-        { "label": "Style, design, or personal branding", "spice": "posh" },
-        { "label": "Baking, crafts, or something wholesome", "spice": "baby" },
-        { "label": "Martial arts, climbing, or dance cardio", "spice": "sporty" },
-        { "label": "Debate, writing, or civic leadership", "spice": "ginger" },
-        { "label": "Motorcycle maintenance or experimental art", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your relationship with fitness is:",
-      "options": [
-        { "label": "Graceful and disciplined", "spice": "posh" },
-        { "label": "Gentle and mood-based", "spice": "baby" },
-        { "label": "Central to your identity", "spice": "sporty" },
-        { "label": "A tool for resilience and voice", "spice": "ginger" },
-        { "label": "Fuel for adrenaline and edge", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Success means:",
-      "options": [
-        { "label": "Excellence and influence", "spice": "posh" },
-        { "label": "Wellbeing for you and yours", "spice": "baby" },
-        { "label": "Mastery through effort", "spice": "sporty" },
-        { "label": "Impact on people and culture", "spice": "ginger" },
-        { "label": "Freedom to live on your terms", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "When rules feel unfair, you:",
-      "options": [
-        { "label": "Negotiate calmly and shift the standard", "spice": "posh" },
-        { "label": "Seek support and find kinder paths", "spice": "baby" },
-        { "label": "Challenge through performance and proof", "spice": "sporty" },
-        { "label": "Organise, speak out, or vote", "spice": "ginger" },
-        { "label": "Defy the rule and take the hit if needed", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "What do you protect most fiercely:",
-      "options": [
-        { "label": "Your standards and time", "spice": "posh" },
-        { "label": "Your close relationships", "spice": "baby" },
-        { "label": "Your progress and goals", "spice": "sporty" },
-        { "label": "Your voice and principles", "spice": "ginger" },
-        { "label": "Your autonomy and edge", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Which statement resonates most:",
-      "options": [
-        { "label": "Style is strategy", "spice": "posh" },
-        { "label": "Kindness is power", "spice": "baby" },
-        { "label": "Movement is life", "spice": "sporty" },
-        { "label": "Truth needs a microphone", "spice": "ginger" },
-        { "label": "Rules are starting points", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your public platform would be used for:",
-      "options": [
-        { "label": "Cultural standards and arts", "spice": "posh" },
-        { "label": "Community wellbeing and care", "spice": "baby" },
-        { "label": "Access to sport and fair play", "spice": "sporty" },
-        { "label": "Education, equity, and inclusion", "spice": "ginger" },
-        { "label": "Expression without compromise", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "In conflict, your first instinct is to:",
-      "options": [
-        { "label": "Stay composed and raise the bar", "spice": "posh" },
-        { "label": "De-escalate and keep people safe", "spice": "baby" },
-        { "label": "Face it head-on and resolve it", "spice": "sporty" },
-        { "label": "Name the issue and seek change", "spice": "ginger" },
-        { "label": "Confront it openly and loudly", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your risk profile is:",
-      "options": [
-        { "label": "Calculated, high standards only", "spice": "posh" },
-        { "label": "Cautious, comfort anchored", "spice": "baby" },
-        { "label": "Competitive, measured risk", "spice": "sporty" },
-        { "label": "Purpose-driven risk", "spice": "ginger" },
-        { "label": "High risk if it matters", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "Your energy is best described as:",
-      "options": [
-        { "label": "Composed and focused", "spice": "posh" },
-        { "label": "Gentle and uplifting", "spice": "baby" },
-        { "label": "Dynamic and forward", "spice": "sporty" },
-        { "label": "Thoughtful and persuasive", "spice": "ginger" },
-        { "label": "Intense and catalytic", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "People often compliment you on:",
-      "options": [
-        { "label": "Taste and judgement", "spice": "posh" },
-        { "label": "Kindness and care", "spice": "baby" },
-        { "label": "Drive and discipline", "spice": "sporty" },
-        { "label": "Wisdom and words", "spice": "ginger" },
-        { "label": "Courage and presence", "spice": "scary" }
-      ]
-    },
-    {
-      "text": "When you feel stuck, you:",
-      "options": [
-        { "label": "Refine, plan, and simplify", "spice": "posh" },
-        { "label": "Rest, reset, and phone a friend", "spice": "baby" },
-        { "label": "Move your body and take action", "spice": "sporty" },
-        { "label": "Research, write, and reframe", "spice": "ginger" },
-        { "label": "Shake it up and break a pattern", "spice": "scary" }
-      ]
-    }
-  ],
+  {
+    "text": "When you want to feel most yourself, what do you put on?",
+    "options": [
+      { "label": "A sleek, tailored outfit that signals control and taste", "spice": "posh" },
+      { "label": "Something soft and playful that makes people smile", "spice": "baby" },
+      { "label": "Clothes that let you move and stay ready for action", "spice": "sporty" },
+      { "label": "An eclectic piece with history or meaning", "spice": "ginger" },
+      { "label": "A bold look that grabs attention instantly", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "How does your bedroom feel when it is truly yours?",
+    "options": [
+      { "label": "Minimal and polished, every detail considered", "spice": "posh" },
+      { "label": "Cosy, colourful, filled with personal touches", "spice": "baby" },
+      { "label": "Organised and functional, space for activity", "spice": "sporty" },
+      { "label": "Stacked with books, art, and conversation starters", "spice": "ginger" },
+      { "label": "Moody, dramatic, a stage for expression", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "On holiday, what clothes always make it into your bag?",
+    "options": [
+      { "label": "Elegant pieces that work in any setting", "spice": "posh" },
+      { "label": "Light, cute outfits perfect for capturing moments", "spice": "baby" },
+      { "label": "Practical gear for hikes, sports, or adventures", "spice": "sporty" },
+      { "label": "Comfortable layers with something quirky", "spice": "ginger" },
+      { "label": "Statement looks that make you unforgettable", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "Which colours feel most natural on you?",
+    "options": [
+      { "label": "Black, white, and neutrals that never go out of style", "spice": "posh" },
+      { "label": "Pastels and soft shades that soothe the eye", "spice": "baby" },
+      { "label": "Bright primaries that show energy", "spice": "sporty" },
+      { "label": "Earth tones mixed with warm highlights", "spice": "ginger" },
+      { "label": "Deep darks lit with electric pops", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "What do your accessories quietly say about you?",
+    "options": [
+      { "label": "I choose quality and intention in everything I wear", "spice": "posh" },
+      { "label": "I am here to add softness and brighten the mood", "spice": "baby" },
+      { "label": "I keep it practical, ready to move anytime", "spice": "sporty" },
+      { "label": "I have something to express without words", "spice": "ginger" },
+      { "label": "I want you to notice me, I am not here to blend in", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "At a party, where do you end up?",
+    "options": [
+      { "label": "Keeping things elegant, making smooth introductions", "spice": "posh" },
+      { "label": "Checking that everyone feels included and comfy", "spice": "baby" },
+      { "label": "Starting games or pulling people onto the dance floor", "spice": "sporty" },
+      { "label": "Getting into deep, lively conversations", "spice": "ginger" },
+      { "label": "Lifting the energy, taking the vibe higher", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "Your friends rely on you most for:",
+    "options": [
+      { "label": "Sharp advice and high standards", "spice": "posh" },
+      { "label": "Comfort, kindness, and gentle reminders", "spice": "baby" },
+      { "label": "Motivation and steady accountability", "spice": "sporty" },
+      { "label": "Perspective and honest advocacy", "spice": "ginger" },
+      { "label": "The courage to take bold steps", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "When someone first meets you, what do they pick up?",
+    "options": [
+      { "label": "Poise and self-possession", "spice": "posh" },
+      { "label": "Warmth and approachability", "spice": "baby" },
+      { "label": "Energy and directness", "spice": "sporty" },
+      { "label": "Curiosity and thoughtfulness", "spice": "ginger" },
+      { "label": "Intensity and magnetism", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "How do you most naturally show care?",
+    "options": [
+      { "label": "By raising the bar for both of us", "spice": "posh" },
+      { "label": "Through small acts of kindness and attention", "spice": "baby" },
+      { "label": "By showing up in person with support", "spice": "sporty" },
+      { "label": "By listening deeply and standing with you", "spice": "ginger" },
+      { "label": "By defending you loudly if you need it", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "In a team, where do you naturally sit?",
+    "options": [
+      { "label": "Quality control, the one who polishes the finish", "spice": "posh" },
+      { "label": "The heart, lifting morale and building bonds", "spice": "baby" },
+      { "label": "The driver, pushing action and results", "spice": "sporty" },
+      { "label": "The conscience, keeping direction honest", "spice": "ginger" },
+      { "label": "The risk-taker, challenging the edges", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "Your ideal Saturday is spent:",
+    "options": [
+      { "label": "Dining well, visiting galleries, attending chic events", "spice": "posh" },
+      { "label": "Sharing coffee, watching films, relaxing with friends", "spice": "baby" },
+      { "label": "At a match, in the gym, or outdoors on the move", "spice": "sporty" },
+      { "label": "Exploring a bookshop, a talk, or a community project", "spice": "ginger" },
+      { "label": "At a gig, on a bike, or trying something daring", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "Which playlist feels like yours?",
+    "options": [
+      { "label": "Sleek R&B and contemporary pop", "spice": "posh" },
+      { "label": "Bubblegum pop and feel-good classics", "spice": "baby" },
+      { "label": "High-energy anthems to move to", "spice": "sporty" },
+      { "label": "Indie, soulful, or politically charged tracks", "spice": "ginger" },
+      { "label": "Punk, alt, or dramatic powerhouse vocals", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "When you travel, what matters most?",
+    "options": [
+      { "label": "Planning well, staying calm, moving in style", "spice": "posh" },
+      { "label": "Being with friends, snacks, laughter, good vibes", "spice": "baby" },
+      { "label": "Staying active - walking, cycling, exploring", "spice": "sporty" },
+      { "label": "Experiencing culture, history, and stories", "spice": "ginger" },
+      { "label": "Going off-track to find the unexpected", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "If you signed up for a class, it would be:",
+    "options": [
+      { "label": "Style, design, or personal branding", "spice": "posh" },
+      { "label": "Baking, crafts, or something nurturing", "spice": "baby" },
+      { "label": "Climbing, martial arts, or high-energy dance", "spice": "sporty" },
+      { "label": "Writing, debate, or civic leadership", "spice": "ginger" },
+      { "label": "Motorcycles, street art, or something experimental", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "Your approach to fitness is:",
+    "options": [
+      { "label": "Graceful, disciplined, and consistent", "spice": "posh" },
+      { "label": "Gentle, mood-based, sometimes playful", "spice": "baby" },
+      { "label": "Central to who I am, part of everyday life", "spice": "sporty" },
+      { "label": "A tool for resilience and expression", "spice": "ginger" },
+      { "label": "An outlet for adrenaline and edge", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "What does success mean to you?",
+    "options": [
+      { "label": "Excellence that influences others", "spice": "posh" },
+      { "label": "Wellbeing for yourself and those you love", "spice": "baby" },
+      { "label": "Mastery earned through effort", "spice": "sporty" },
+      { "label": "Impact on people, culture, and ideas", "spice": "ginger" },
+      { "label": "Freedom to live boldly on your terms", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "When rules feel unfair, what do you do?",
+    "options": [
+      { "label": "Negotiate calmly and shift the standard", "spice": "posh" },
+      { "label": "Seek allies and find a kinder solution", "spice": "baby" },
+      { "label": "Prove your point through action and results", "spice": "sporty" },
+      { "label": "Organise, speak out, and push for change", "spice": "ginger" },
+      { "label": "Defy the rule and take the hit if needed", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "What do you protect most fiercely?",
+    "options": [
+      { "label": "Your standards and your time", "spice": "posh" },
+      { "label": "Your closest relationships", "spice": "baby" },
+      { "label": "Your progress and your goals", "spice": "sporty" },
+      { "label": "Your voice and your principles", "spice": "ginger" },
+      { "label": "Your autonomy and your edge", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "Which statement feels truest to you?",
+    "options": [
+      { "label": "Style is strategy", "spice": "posh" },
+      { "label": "Kindness is power", "spice": "baby" },
+      { "label": "Movement is life", "spice": "sporty" },
+      { "label": "Truth needs a microphone", "spice": "ginger" },
+      { "label": "Rules are only starting points", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "If you had a public platform, you would use it for:",
+    "options": [
+      { "label": "Raising cultural standards and taste", "spice": "posh" },
+      { "label": "Community care and wellbeing", "spice": "baby" },
+      { "label": "Access to sport, fairness, and opportunity", "spice": "sporty" },
+      { "label": "Education, equity, and inclusion", "spice": "ginger" },
+      { "label": "Expression without compromise", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "In conflict, your first instinct is:",
+    "options": [
+      { "label": "Stay calm, composed, and raise the standard", "spice": "posh" },
+      { "label": "De-escalate, keep people safe, find harmony", "spice": "baby" },
+      { "label": "Face it head-on and resolve it quickly", "spice": "sporty" },
+      { "label": "Name the issue clearly and seek change", "spice": "ginger" },
+      { "label": "Confront it openly, even loudly if needed", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "What is your natural risk style?",
+    "options": [
+      { "label": "Calculated, only when standards are high enough", "spice": "posh" },
+      { "label": "Cautious, comfort and safety first", "spice": "baby" },
+      { "label": "Competitive, measured risk to test limits", "spice": "sporty" },
+      { "label": "Principled, taking risk only for purpose", "spice": "ginger" },
+      { "label": "High risk if it truly matters", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "Your energy is best described as:",
+    "options": [
+      { "label": "Focused and composed", "spice": "posh" },
+      { "label": "Gentle and uplifting", "spice": "baby" },
+      { "label": "Dynamic and forward-moving", "spice": "sporty" },
+      { "label": "Thoughtful and persuasive", "spice": "ginger" },
+      { "label": "Intense and catalytic", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "What do people most often compliment you on?",
+    "options": [
+      { "label": "Taste and good judgement", "spice": "posh" },
+      { "label": "Kindness and care", "spice": "baby" },
+      { "label": "Drive and discipline", "spice": "sporty" },
+      { "label": "Wisdom and words", "spice": "ginger" },
+      { "label": "Courage and presence", "spice": "scary" }
+    ]
+  },
+  {
+    "text": "When you feel stuck, how do you respond?",
+    "options": [
+      { "label": "Refine the plan, simplify, and reset", "spice": "posh" },
+      { "label": "Rest, recharge, and lean on a friend", "spice": "baby" },
+      { "label": "Move your body and take decisive action", "spice": "sporty" },
+      { "label": "Research, reframe, and find new perspective", "spice": "ginger" },
+      { "label": "Shake things up and break the pattern", "spice": "scary" }
+    ]
+  }
+],
 
   "bonus": [
     {
-      "text": "Pick the motto that feels closest:",
+      "text": "Which line feels most like you?",
       "options": [
-        { "label": "Excellence attracts excellence", "spice": "posh" },
-        { "label": "Care creates confidence", "spice": "baby" },
-        { "label": "Practice makes power", "spice": "sporty" },
-        { "label": "Voice changes culture", "spice": "ginger" },
-        { "label": "Boldness breaks barriers", "spice": "scary" }
+        { "label": "If it is worth doing, it should be done beautifully", "spice": "posh" },
+        { "label": "If you feel cared for, you can do anything", "spice": "baby" },
+        { "label": "Hard work beats talent when talent does not work hard", "spice": "sporty" },
+        { "label": "A truth unspoken changes nothing", "spice": "ginger" },
+        { "label": "Being too much is better than being silent", "spice": "scary" }
       ]
     },
     {
-      "text": "Where do you feel most alive:",
+      "text": "Where do you feel most alive?",
       "options": [
-        { "label": "In a space that reflects your standards", "spice": "posh" },
-        { "label": "With people you can nurture", "spice": "baby" },
-        { "label": "In motion, in flow", "spice": "sporty" },
-        { "label": "Where ideas meet action", "spice": "ginger" },
-        { "label": "At the edge of comfort", "spice": "scary" }
+        { "label": "In a space that reflects my standards", "spice": "posh" },
+        { "label": "Surrounded by people I can nurture", "spice": "baby" },
+        { "label": "When my body is moving and I am in flow", "spice": "sporty" },
+        { "label": "In places where ideas spark change", "spice": "ginger" },
+        { "label": "On the edge of risk where things feel raw", "spice": "scary" }
       ]
     },
     {
-      "text": "What do you never apologise for:",
+      "text": "What would you never apologise for?",
       "options": [
-        { "label": "Having high standards", "spice": "posh" },
-        { "label": "Being gentle", "spice": "baby" },
+        { "label": "Holding the bar high", "spice": "posh" },
+        { "label": "Being gentle and soft", "spice": "baby" },
         { "label": "Wanting to win fairly", "spice": "sporty" },
-        { "label": "Speaking up", "spice": "ginger" },
-        { "label": "Being too much", "spice": "scary" }
+        { "label": "Speaking up when it matters", "spice": "ginger" },
+        { "label": "Taking up space and being loud", "spice": "scary" }
+      ]
+    },
+    {
+      "text": "What kind of compliment means the most to you?",
+      "options": [
+        { "label": "That my taste is impeccable", "spice": "posh" },
+        { "label": "That I made someone feel safe", "spice": "baby" },
+        { "label": "That I never gave up", "spice": "sporty" },
+        { "label": "That I helped them see clearly", "spice": "ginger" },
+        { "label": "That I gave them courage", "spice": "scary" }
+      ]
+    },
+    {
+      "text": "If you could only keep one thing, it would be:",
+      "options": [
+        { "label": "My standards and time", "spice": "posh" },
+        { "label": "My closest relationships", "spice": "baby" },
+        { "label": "My progress and goals", "spice": "sporty" },
+        { "label": "My voice and convictions", "spice": "ginger" },
+        { "label": "My freedom to live on my terms", "spice": "scary" }
+      ]
+    },
+    {
+      "text": "How do you usually react when someone underestimates you?",
+      "options": [
+        { "label": "Prove them wrong with quiet excellence", "spice": "posh" },
+        { "label": "Win them over with kindness", "spice": "baby" },
+        { "label": "Outwork them and let results speak", "spice": "sporty" },
+        { "label": "Challenge their assumptions out loud", "spice": "ginger" },
+        { "label": "Lean into being underestimated, then shock them", "spice": "scary" }
+      ]
+    },
+    {
+      "text": "Which situation excites you most?",
+      "options": [
+        { "label": "Being asked to set the standard", "spice": "posh" },
+        { "label": "Being trusted to care for others", "spice": "baby" },
+        { "label": "Competing where stakes are high", "spice": "sporty" },
+        { "label": "Speaking in front of people who will listen", "spice": "ginger" },
+        { "label": "Taking on something risky and raw", "spice": "scary" }
+      ]
+    },
+    {
+      "text": "If people could only describe you in one word, you’d want it to be:",
+      "options": [
+        { "label": "Refined", "spice": "posh" },
+        { "label": "Kind", "spice": "baby" },
+        { "label": "Driven", "spice": "sporty" },
+        { "label": "Insightful", "spice": "ginger" },
+        { "label": "Fearless", "spice": "scary" }
+      ]
+    },
+    {
+      "text": "Which role feels most natural to you?",
+      "options": [
+        { "label": "The curator who sets the tone", "spice": "posh" },
+        { "label": "The nurturer who keeps harmony", "spice": "baby" },
+        { "label": "The doer who brings results", "spice": "sporty" },
+        { "label": "The thinker who names the truth", "spice": "ginger" },
+        { "label": "The spark who shakes things up", "spice": "scary" }
+      ]
+    },
+    {
+      "text": "What do you believe people secretly admire in you?",
+      "options": [
+        { "label": "My sense of control and taste", "spice": "posh" },
+        { "label": "My softness and loyalty", "spice": "baby" },
+        { "label": "My stamina and focus", "spice": "sporty" },
+        { "label": "My ability to voice what others feel", "spice": "ginger" },
+        { "label": "My intensity and refusal to shrink", "spice": "scary" }
       ]
     }
   ]
+
 }
