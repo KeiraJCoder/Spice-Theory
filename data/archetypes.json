@@ -1,10 +1,10 @@
 {
 "spices": [
-    { "key": "posh",   "name": "Posh",   "colorClass": "posh",   "tagline": "Elegance, standards, quiet authority", "image": "./assets/posh.jpg" },
-    { "key": "baby",   "name": "Baby",   "colorClass": "baby",   "tagline": "Warmth, care, joyful charm",           "image": "./assets/baby.avif" },
-    { "key": "sporty", "name": "Sporty", "colorClass": "sporty", "tagline": "Drive, stamina, momentum",             "image": "./assets/sporty.jpg" },  
-    { "key": "ginger", "name": "Ginger", "colorClass": "ginger", "tagline": "Conviction, culture, visibility",      "image": "./assets/ginger.webp" },
-    { "key": "scary",  "name": "Scary",  "colorClass": "scary",  "tagline": "Boldness, intensity, presence",        "image": "./assets/scary.jpg" }
+    { "key": "posh",   "name": "Posh",   "colorClass": "posh",   "tagline": "Elegance, standards, quiet authority", "image": "../assets/posh.jpg" },
+    { "key": "baby",   "name": "Baby",   "colorClass": "baby",   "tagline": "Warmth, care, joyful charm",           "image": ".//assets/baby.avif" },
+    { "key": "sporty", "name": "Sporty", "colorClass": "sporty", "tagline": "Drive, stamina, momentum",             "image": ".//assets/sporty.jpg" },  
+    { "key": "ginger", "name": "Ginger", "colorClass": "ginger", "tagline": "Conviction, culture, visibility",      "image": ".//assets/ginger.webp" },
+    { "key": "scary",  "name": "Scary",  "colorClass": "scary",  "tagline": "Boldness, intensity, presence",        "image": ".//assets/scary.jpg" }
   ],
 
   "descriptions": {
