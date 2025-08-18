@@ -297,19 +297,19 @@ legend {
 /* >>> RADIO BUTTON - refreshed look (only this block changed/extended) */
 .option input[type='radio'] {
   margin-top: 3px;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   appearance: none;
   border-radius: 50%;
   border: 2px solid var(--accent);
   background: #fff;
   cursor: pointer;
   outline: none;
-  transition: box-shadow .2s ease, transform .12s ease, border-color .2s ease, background .2s ease;
+  transition: all .2s ease;
 }
 
 .option input[type='radio']:hover {
-  box-shadow: 0 0 0 4px rgba(106, 92, 255, 0.12);
+  box-shadow: 0 0 0 5px rgba(106, 92, 255, 0.15);
 }
 
 .option input[type='radio']:focus-visible {
@@ -319,9 +319,8 @@ legend {
 .option input[type='radio']:checked {
   border-color: transparent;
   background: radial-gradient(circle at 50% 50%,
-              var(--accent) 0%, var(--accent-2) 60%, var(--accent-3) 100%);
-  box-shadow: 0 0 0 4px rgba(106, 92, 255, 0.18);
-  transform: scale(0.98);
+              var(--accent) 0%, var(--accent-2) 70%, var(--accent-3) 100%);
+  box-shadow: 0 0 0 4px rgba(122, 1, 222, 0.729);
 }
 
 .option span { line-height: 1.35; }
@@ -334,8 +333,8 @@ legend {
 
 .option:has(input[type='radio']:checked) {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(106, 92, 255, 0.18);
-  background: linear-gradient(180deg, rgba(106, 92, 255, 0.09), rgba(255, 255, 255, 0.6));
+  box-shadow: 0 0 0 3px rgba(220, 240, 4, 0.905);
+  background: linear-gradient(180deg, rgba(160, 92, 255, 0.745), rgb(33, 196, 125));
 }
 
 /* --------------------------------
@@ -351,36 +350,41 @@ legend {
 
 .controls .control-right { display: flex; gap: 8px; }
 
+
+
 button {
   appearance: none;
   border: 0;
   cursor: pointer;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
+  padding: 10px 10px;
+  border-radius: 14px;
+  font-weight: 300;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
   color: #fff;
-  background: linear-gradient(180deg, #222, #111);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
-  transition: transform 0.08s ease, box-shadow 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow: 0 6px 14px rgba(173, 48, 48, 0.25);
+  transition: transform 0.12s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 12px 24px rgba(223, 70, 240, 0.22);
 }
 
 button:active {
   transform: translateY(0);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 6px 12px rgba(177, 10, 10, 0.22);
 }
 
 button.secondary {
-  color: var(--text);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(240, 240, 244, 0.8));
-  border: 1px solid rgba(120, 120, 140, 0.18);
-  box-shadow: 0 6px 12px rgba(20, 16, 53, 0.08);
+  color: #fff;
+  background: linear-gradient(180deg, #444, #222);
+  border: 0;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
 }
+
+
 
 button:disabled { opacity: 0.55; cursor: not-allowed; }
 
