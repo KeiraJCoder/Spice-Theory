@@ -1,219 +1,420 @@
 /* ================================
-   Spice Theory — style.css (revamp)
-   - Neutral option styling (no spice colours)
-   - Modern, lively visuals
-   - Keyboard & screen-reader friendly
-   - Dark mode + reduced motion support
+    Spice Theory — style.css (revamp, spaces-only)
+    - Neutral option styling (no spice colours)
+    - Modern, lively visuals
+    - Keyboard & screen-reader friendly
+    - Dark mode + reduced motion support
+    - Hero image behind heading (faces only) + name strip (Ginger, Baby, Scary, Sporty, Posh)
+    - Spice font applied to H1 (loaded from /assets)
    ================================ */
 
-/* ---------- Design tokens ---------- */
+/* --------------------------------
+    0) Custom font: "Spice"
+   -------------------------------- */
+@font-face {
+  font-family: 'Spice';
+  src:
+    local('Spice'),
+    url('/assets/Spice.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* ================================
+   0) CUSTOM FONT: SPICE
+   - The "Spice" TTF only ships uppercase A–Z.
+   - We add a 'SpiceCaps' face limited to A–Z to allow smart fallback (Fix 2).
+   ================================ */
+@font-face{
+  font-family: "Spice";
+  src: url("/assets/Spice.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* Uppercase-only slice for smart fallback (used in Fix 2) */
+@font-face{
+  font-family: "SpiceCaps";
+  src: url("/assets/Spice.ttf") format("truetype");
+  font-display: swap;
+  /* A–Z, space and a few basics; adjust if you need more punctuation */
+  unicode-range: U+0020, U+0021-002F, U+003A-0040, U+0041-005A;
+}
+
+/* Utility stack so we don’t repeat long font lists */
 :root{
+  --ui-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial;
+}
+
+/* ================================
+   TITLE — FIX 1 (ACTIVE)
+   Make the title uppercase so every character exists in Spice.
+   ================================ */
+#app-title{
+  font-family: "Spice", var(--ui-sans);
+  text-transform: uppercase;   /* ensures no missing glyphs */
+  letter-spacing: .04em;
+  line-height: 1.1;
+  font-weight: 700;            /* Spice is display-y; keep weight modest */
+}
+
+
+
+/* --------------------------------
+    1) Design tokens
+   -------------------------------- */
+:root {
   --bg: #f7f6fb;
   --card: #ffffff;
   --text: #13131a;
   --muted: #686a76;
 
-  --accent: #6a5cff;         /* playful purple-blue */
-  --accent-2: #ff7ab6;       /* warm pink */
-  --accent-3: #24c8a5;       /* mint */
-  --ring: rgba(106,92,255,.35);
+  --accent: #6a5cff; /* playful purple-blue */
+  --accent-2: #ff7ab6; /* warm pink */
+  --accent-3: #24c8a5; /* mint */
+  --ring: rgba(106, 92, 255, 0.35);
 
-  --surface: rgba(255,255,255,.7);
-  --shadow: 0 12px 30px rgba(20,16,53,.12), 0 2px 8px rgba(20,16,53,.06);
+  --surface: rgba(255, 255, 255, 0.7);
+  --shadow: 0 12px 30px rgba(20, 16, 53, 0.12), 0 2px 8px rgba(20, 16, 53, 0.06);
   --radius: 14px;
   --radius-sm: 10px;
 
   --focus: 0 0 0 3px var(--ring);
 }
 
-@media (prefers-color-scheme: dark){
-  :root{
+@media (prefers-color-scheme: dark) {
+  :root {
     --bg: #0e0f13;
     --card: #151720;
     --text: #f1f2f6;
     --muted: #a2a6b3;
-    --surface: rgba(21,23,32,.7);
-    --shadow: 0 12px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
+    --surface: rgba(21, 23, 32, 0.7);
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.25);
   }
 }
 
-/* ---------- Base reset ---------- */
-*{ box-sizing:border-box; }
-html,body{ height:100%; }
-body{
-  margin:0;
+/* --------------------------------
+    2) Base reset
+   -------------------------------- */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   color: var(--text);
   background:
-    radial-gradient(1200px 800px at -10% -10%, rgba(106,92,255,.15), transparent 50%),
-    radial-gradient(900px 700px at 110% 10%, rgba(255,122,182,.14), transparent 55%),
-    radial-gradient(1000px 600px at 50% 120%, rgba(36,200,165,.10), transparent 60%),
+    radial-gradient(1200px 800px at -10% -10%, rgba(106, 92, 255, 0.15), transparent 50%),
+    radial-gradient(900px 700px at 110% 10%, rgba(255, 122, 182, 0.14), transparent 55%),
+    radial-gradient(1000px 600px at 50% 120%, rgba(36, 200, 165, 0.10), transparent 60%),
     var(--bg);
 }
 
-/* ---------- Layout ---------- */
-.container{
+/* --------------------------------
+    3) Layout
+   -------------------------------- */
+.container {
   max-width: 920px;
   margin: clamp(12px, 4vw, 28px) auto;
   padding: clamp(8px, 2vw, 16px);
 }
 
-.site-header{
-  display:flex; gap:16px; align-items:flex-start;
+/* --------------------------------
+    4) Header with hero image + overlay
+    - Background image sits behind heading/lede
+    - Cropped to faces
+    - Heading/subheading centred
+    - FIX: Names at the very bottom, pillbar just above names.
+   -------------------------------- */
+.site-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  text-align: center;
   margin-bottom: clamp(16px, 3vw, 28px);
-}
-
-.logo{
-  width:48px; height:48px; border-radius:50%;
-  background: conic-gradient(from 180deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent));
+  padding: 16px 16px 100px;   /* room for pills + names rows */
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--card);
   box-shadow: var(--shadow);
-  filter: saturate(110%);
 }
 
-.site-header h1{
-  margin:0 0 6px;
-  font-weight:800;
-  letter-spacing:.2px;
-  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+/* hero image */
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/spice-girls-hero-home.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 18%;
+  transform: scale(1.02);
+  z-index: 0;
+  filter: contrast(1.02) saturate(1.02);
 }
-.lede{
-  margin:0;
-  color: var(--muted);
+
+/* soft gradient overlay for legibility */
+.site-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+    radial-gradient(1000px 600px at 80% -20%, rgba(106, 92, 255, 0.25), transparent 60%);
+  z-index: 1;
+}
+
+/* keep header content above the overlays */
+.site-header > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* circular accent "logo" chip */
+
+
+/* main title: use installed 'Spice' font if available */
+.site-header h1 {
+  margin: 0;
+  padding-top:15px;
+  font-family: 'Spice', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-weight: 800;
+  letter-spacing: .2px;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.05;
+  color: #9c2aed;
+  text-shadow: 0px 3px rgb(0, 0, 0);
+}
+
+/* subheading ("Personality Quiz") */
+.site-header .subtitle {
+  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  color: rgba(255, 255, 255, .95);
+  text-shadow: 0 1px 8px rgb(0, 0, 0);
+}
+
+/* descriptive line under the subtitle */
+.lede {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
   font-size: clamp(.95rem, 1.3vw, 1.05rem);
+  text-shadow: 0 1px 8px rgb(0, 0, 0);
 }
 
-/* ---------- Pillbar (neutral) ---------- */
-.pillbar{ display:flex; gap:8px; margin-top:8px; opacity:.6; filter:saturate(80%); }
-.pill{
-  padding:8px 12px; border-radius:999px;
-  background: linear-gradient(180deg, var(--surface), rgba(255,255,255,.35));
-  border: 1px solid rgba(120,120,140,.18);
-  color: var(--text);
-  font-weight:600; font-size:.85rem;
-  backdrop-filter: blur(6px);
+.names-strip {
+  position: absolute;
+  bottom: 12px;
+  width: 100%;
+}
+.names-strip .name {
+  position: absolute;
+  bottom: 0;
+  font-weight: 800;
+  font-size: 1rem;
+}
+.names-strip .name:nth-child(1) { left: 14%; }   /* Ginger */
+.names-strip .name:nth-child(2) { left: 32%; }  /* Baby */
+.names-strip .name:nth-child(3) { left: 47%; }  /* Scary */
+.names-strip .name:nth-child(4) { left: 65%; }  /* Sporty */
+.names-strip .name:nth-child(5) { left: 87%; }  /* Posh */
+
+/* Exact colours for each name label */
+.name--ginger { color: #ff7b00; }   /* orange */
+.name--baby   { color: #ff7ab6; }   /* pink (matches --accent-2) */
+.name--scary  { color: #f0e857; }   /* dark purple */
+.name--sporty { color: #2b6eff; }   /* royal blue */
+.name--posh   { color: #000000; }   /* black */
+
+/* Keep coloured text readable over the photo */
+.names-strip .name{
+  text-shadow:
+    0 1px rgb(239, 239, 239),
+    0 1px rgb(160, 75, 75);
+  
 }
 
-/* ---------- Progress ---------- */
-.progress{ margin: 10px 0 14px; }
-.progressbar{
-  width:100%; height:12px; border-radius:999px; overflow:hidden;
-  background: linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.04));
-  border:1px solid rgba(120,120,140,.16);
+.names-strip .name{
+  text-shadow:
+    0 0 2px rgba(0,0,0,.6),
+    0 1px 10px rgba(0,0,0,.45);
 }
-.progressbar #bar{
-  height:100%; width:0%;
+@supports (-webkit-text-stroke: 1px black){
+  .names-strip .name{ -webkit-text-stroke: .6px rgba(0,0,0,.55); }
+  .name--posh{ -webkit-text-stroke: .8px rgb(255, 255, 255); } /* black text over dark */
+  .name--scary{ -webkit-text-stroke: .8px rgb(21, 202, 187); } /* black text over dark */
+}
+
+
+
+/* --------------------------------
+    6) Progress
+   -------------------------------- */
+.progress { margin: 10px 0 14px; }
+
+.progressbar {
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04));
+  border: 1px solid rgba(120, 120, 140, 0.16);
+}
+
+.progressbar #bar {
+  height: 100%;
+  width: 0%;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
-  transition: width .35s ease;
+  transition: width 0.35s ease;
 }
-#progressText{ margin-top:6px; color: var(--muted); font-size:.95rem; }
 
-/* ---------- Card ---------- */
-.card{
+#progressText {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* --------------------------------
+    7) Card
+   -------------------------------- */
+.card {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: clamp(14px, 2.2vw, 20px);
 }
 
-/* ---------- Form / Question ---------- */
-fieldset{ border:0; margin:0; padding:0; }
-legend{
+/* --------------------------------
+    8) Form / Question
+   -------------------------------- */
+fieldset { border: 0; margin: 0; padding: 0; }
+
+legend {
   font-weight: 700;
   font-size: clamp(1.05rem, 1.4vw, 1.15rem);
   margin-bottom: 10px;
 }
 
-/* Options (radio rows) */
-.options{ display:grid; gap:10px; }
+/* radio rows */
+.options { display: grid; gap: 10px; }
 
-.option{
-  display:grid;
+.option {
+  display: grid;
   grid-template-columns: 22px 1fr;
-  align-items:flex-start;
-  gap:12px;
+  align-items: flex-start;
+  gap: 12px;
   padding: 12px 14px;
   border-radius: var(--radius-sm);
-  border:1px solid rgba(120,120,140,.18);
-  background: linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.35));
+  border: 1px solid rgba(120, 120, 140, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.35));
   backdrop-filter: blur(6px);
-  transition: transform .08s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+  transition: transform 0.08s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
-.option input[type="radio"]{
-  margin-top:3px;
-  /* larger, accessible radios */
-  width:18px; height:18px;
+.option input[type='radio'] {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
   accent-color: var(--accent);
 }
-.option span{ line-height:1.35; }
 
-.option:hover{
+.option span { line-height: 1.35; }
+
+.option:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(20,16,53,.08);
-  border-color: rgba(106,92,255,.35);
+  box-shadow: 0 6px 16px rgba(20, 16, 53, 0.08);
+  border-color: rgba(106, 92, 255, 0.35);
 }
-.option:has(input[type="radio"]:checked){
+
+.option:has(input[type='radio']:checked) {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(106,92,255,.18);
-  background: linear-gradient(180deg, rgba(106,92,255,.09), rgba(255,255,255,.6));
+  box-shadow: 0 0 0 3px rgba(106, 92, 255, 0.18);
+  background: linear-gradient(180deg, rgba(106, 92, 255, 0.09), rgba(255, 255, 255, 0.6));
 }
 
-/* ---------- Controls ---------- */
-.controls{
+/* --------------------------------
+    9) Controls (buttons)
+   -------------------------------- */
+.controls {
   margin-top: 14px;
-  display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
 }
-.controls .control-right{ display:flex; gap:8px; }
 
-button{
-  appearance:none; border:0; cursor:pointer;
-  padding: 10px 14px; border-radius: 12px;
-  font-weight:700; letter-spacing:.2px;
-  color:#fff; background: linear-gradient(180deg, #222, #111);
-  box-shadow: 0 8px 16px rgba(0,0,0,.18);
-  transition: transform .08s ease, box-shadow .18s ease, opacity .18s ease, background .18s ease;
+.controls .control-right { display: flex; gap: 8px; }
+
+button {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #fff;
+  background: linear-gradient(180deg, #222, #111);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+  transition: transform 0.08s ease, box-shadow 0.18s ease, opacity 0.18s ease, background 0.18s ease;
 }
-button:hover{ transform: translateY(-1px); box-shadow: 0 12px 24px rgba(0,0,0,.22); }
-button:active{ transform: translateY(0); box-shadow: 0 6px 12px rgba(0,0,0,.22); }
 
-button.secondary{
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.22);
+}
+
+button.secondary {
   color: var(--text);
-  background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(240,240,244,.8));
-  border:1px solid rgba(120,120,140,.18);
-  box-shadow: 0 6px 12px rgba(20,16,53,.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(240, 240, 244, 0.8));
+  border: 1px solid rgba(120, 120, 140, 0.18);
+  box-shadow: 0 6px 12px rgba(20, 16, 53, 0.08);
 }
-button:disabled{ opacity:.55; cursor:not-allowed; }
 
-/* ---------- Results ---------- */
-.result{ display:grid; gap:12px; text-align:center; }
-#resultTitle{
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* --------------------------------
+    10) Results
+   -------------------------------- */
+.result { display: grid; gap: 12px; text-align: center; }
+
+#resultTitle {
   font-size: clamp(1.4rem, 3vw, 1.9rem);
   margin: 2px 0 4px;
 }
-#resultBlurb{ color: var(--muted); }
 
-.badge.pill{
-  display:inline-block;
-  padding:8px 12px;
-  border-radius:999px;
-  background: linear-gradient(180deg, var(--surface), rgba(255,255,255,.35));
-  border: 1px solid rgba(120,120,140,.18);
-  font-weight:700;
-  margin-right:6px;
+#resultBlurb { color: var(--muted); }
+
+.badge.pill {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--surface), rgba(255, 255, 255, 0.35));
+  border: 1px solid rgba(120, 120, 140, 0.18);
+  font-weight: 700;
+  margin-right: 6px;
 }
 
-.grid{
-  display:grid; gap:14px;
+.grid {
+  display: grid;
+  gap: 14px;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
-.muted{ color: var(--muted); }
-.hidden{ display:none !important; }
+
+.muted { color: var(--muted); }
+.hidden { display: none !important; }
 
 .highlight-primary {
   border: 2px solid var(--accent);
   border-radius: var(--radius-sm);
   padding: 8px;
-  background: linear-gradient(180deg, rgba(106,92,255,.08), rgba(255,255,255,.4));
+  background: linear-gradient(180deg, rgba(106, 92, 255, 0.08), rgba(255, 255, 255, 0.4));
 }
 
 .highlight-primary h3 {
@@ -221,20 +422,35 @@ button:disabled{ opacity:.55; cursor:not-allowed; }
   color: var(--accent);
 }
 
-.highlight-primary p {
-  font-weight: 600;
+.highlight-primary p { font-weight: 600; }
+
+/* --------------------------------
+    11) Focus ring & reduced motion
+   -------------------------------- */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 10px;
 }
 
-
-/* ---------- Focus & motion ---------- */
-:focus-visible{ outline:none; box-shadow: var(--focus); border-radius:10px; }
-@media (prefers-reduced-motion: reduce){
-  *{ animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
-/* ---------- Small screen tweaks ---------- */
-@media (max-width: 560px){
-  .site-header{ align-items:center; }
-  .logo{ width:42px; height:42px; }
-  .controls{ gap:8px; }
+/* --------------------------------
+    12) Small screen tweaks
+   -------------------------------- */
+@media (max-width: 560px) {
+  .site-header { align-items: center; padding-bottom: 56px; }
+
+  .controls { gap: 8px; }
+
+  /* Names remain at the very bottom; lift pills a touch on small screens */
+  .names-strip { bottom: 8px; padding: 0 10px; }
+  .site-header .pillbar,
+  .site-header #pillbar { bottom: 48px; }
+  .names-strip .name { font-size: 0.85rem; }
 }
