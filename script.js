@@ -419,169 +419,250 @@
         };
 
         // Small helpers
-        function wrapText(ctx, text, x, y, maxWidth, lineHeight){
-            const words = String(text || '').split(/\s+/);
-            let line = '', lines = [];
-            for (let i = 0; i < words.length; i++){
-            const test = line ? line + ' ' + words[i] : words[i];
-            if (ctx.measureText(test).width > maxWidth && line){
-                lines.push(line); line = words[i];
-            } else {
-                line = test;
-            }
-            }
-            if (line) lines.push(line);
-            lines.forEach((ln, i) => ctx.fillText(ln, x, y + i * lineHeight));
-            return y + lines.length * lineHeight;
+        // --- REPLACE THESE HELPERS + buildPng IN script.js ---
+
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight){
+    const words = String(text || '').split(/\s+/);
+    let line = '', lines = [];
+    for (const w of words){
+        const test = line ? line + ' ' + w : w;
+        if (ctx.measureText(test).width > maxWidth && line){
+        lines.push(line); line = w;
+        } else {
+        line = test;
         }
+    }
+    if (line) lines.push(line);
+    lines.forEach((ln, i) => ctx.fillText(ln, x, y + i * lineHeight));
+    return y + lines.length * lineHeight;
+    }
 
-        function loadImage(src){
-            return new Promise((resolve) => {
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(null);
-            img.src = src || '';
-            });
+    function measureTextBlock(ctx, text, maxWidth, lineHeight){
+    const words = String(text || '').split(/\s+/);
+    let line = '', lines = 0;
+    for (const w of words){
+        const test = line ? line + ' ' + w : w;
+        if (ctx.measureText(test).width > maxWidth && line){
+        lines++; line = w;
+        } else {
+        line = test;
         }
+    }
+    if (line) lines++;
+    return lines * lineHeight;
+    }
 
-        async function buildPng(){
-            const W = 1080, H = 1350, PAD = 56;
-            const canvas = document.createElement('canvas');
-            canvas.width = W; canvas.height = H;
-            const ctx = canvas.getContext('2d');
+    function loadImage(src){
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null);
+        img.src = src || '';
+    });
+    }
 
-            // Background
-            const g = ctx.createLinearGradient(0, 0, 0, H);
-            g.addColorStop(0, '#111217');
-            g.addColorStop(1, '#1b1d27');
-            ctx.fillStyle = g;
-            ctx.fillRect(0, 0, W, H);
+    async function buildPng(){
+    // ---- Layout constants
+    const W = 1080;                 // canvas width
+    const PAD = 56;                 // outer padding
+    const TITLE_GAP = 78;           // gap under "Spice Theory"
+    const BADGES_H = 64;            // visual space for badges row
+    const AFTER_BADGES_GAP = 32;    // gap below badges before images
+    const IMG_H = 520;              // fixed image-box height
+    const IMG_GAP = PAD;            // gap between the two images
+    const TEXT_GAP = 36;            // gap below images before text
+    const SECTION_GAP = 22;         // gap between headings and body
 
-            const accent = spiceColour[primary] || '#6a5cff';
+    // ---- Fonts used for measurement
+    const fTitle = '800 84px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    const fH2    = '800 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    const fBody1 = '600 34px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    const fBody2 = '400 30px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
 
-            // Title
-            ctx.fillStyle = '#fff';
-            ctx.textBaseline = 'top';
-            ctx.font = '700 64px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            ctx.fillText('Spice Theory', PAD, PAD);
+    // ----- Figure out current result bits already computed by showResult()
+    const { primary, secondary, pPct, sPct } = window.__lastResult || {};
+    const pMeta = DATA.spices.find(s => s.key === primary);
+    const sMeta = DATA.spices.find(s => s.key === secondary);
+    const isPure = sPct === 0;
 
-            const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-            const title = (primary === secondary)
-            ? ( { posh:'True Posh', baby:'All Baby', sporty:'Hard Sporty', ginger:'Full Ginger', scary:'Max Scary' }[primary] || cap(primary) )
-            : `${cap(secondary)} ${cap(primary)}`;
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+    const title = (primary === secondary)
+        ? ({ posh:'True Posh', baby:'All Baby', sporty:'Hard Sporty', ginger:'Full Ginger', scary:'Max Scary' }[primary] || cap(primary))
+        : `${cap(secondary)} ${cap(primary)}`;
 
-            ctx.font = '800 84px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            ctx.fillStyle = accent;
-            ctx.fillText(title, PAD, PAD + 78);
+    const blurb = resultBlurb.textContent || '';
+    const primaryText = DATA.descriptions[primary]   || '';
+    const secondaryText = isPure ? '' : (DATA.descriptions[secondary] || '');
 
-            // Badges
-            ctx.font = '700 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            const badgeY = PAD + 78 + 100;
-            function badge(text, x){
-            const padX = 18, padY = 10, h = 48, r = 999;
-            const w = ctx.measureText(text).width + padX * 2;
-            ctx.fillStyle = 'rgba(255,255,255,0.12)';
-            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(x + r, badgeY);
-            ctx.lineTo(x + w - r, badgeY);
-            ctx.quadraticCurveTo(x + w, badgeY, x + w, badgeY + r);
-            ctx.lineTo(x + w, badgeY + h - r);
-            ctx.quadraticCurveTo(x + w, badgeY + h, x + w - r, badgeY + h);
-            ctx.lineTo(x + r, badgeY + h);
-            ctx.quadraticCurveTo(x, badgeY + h, x, badgeY + h - r);
-            ctx.lineTo(x, badgeY + r);
-            ctx.quadraticCurveTo(x, badgeY, x + r, badgeY);
-            ctx.fill(); ctx.stroke();
-            ctx.fillStyle = '#fff';
-            ctx.fillText(text, x + padX, badgeY + padY);
-            return x + w + 12;
-            }
+    // ---- Measure text to compute required height
+    const measureCtx = document.createElement('canvas').getContext('2d');
+    const textWidth = W - PAD * 2;
 
-            const pMeta = DATA.spices.find(s => s.key === primary);
-            const sMeta = DATA.spices.find(s => s.key === secondary);
-            let x = PAD;
-            if (isPure){
-            x = badge(`${pMeta?.name || cap(primary)} 100%`, x);
-            } else {
-            x = badge(`${sMeta?.name || cap(secondary)} ${sPct}%`, x);
-            x = badge(`${pMeta?.name || cap(primary)} ${pPct}%`, x);
-            }
+    measureCtx.font = fBody1;
+    const blurbH = measureTextBlock(measureCtx, blurb, textWidth, 44);
 
-            // Images
-            const imgTop = badgeY + 80;
-            const imgW = isPure ? W - PAD*2 : Math.floor((W - PAD*3) / 2);
-            const imgH = 520;
-            const primImg = await loadImage(pMeta?.image);
-            const secImg  = isPure ? null : await loadImage(sMeta?.image);
+    measureCtx.font = fBody2;
+    const primH  = measureTextBlock(measureCtx, primaryText, textWidth, 40);
+    const secH   = isPure ? 0 : measureTextBlock(measureCtx, secondaryText, textWidth, 40);
 
-            function drawImg(img, x, y, w, h, colour){
-            ctx.fillStyle = 'rgba(255,255,255,0.06)';
-            ctx.fillRect(x, y, w, h);
-            if (img){
-                const iw = img.naturalWidth, ih = img.naturalHeight;
-                const scale = Math.max(w/iw, h/ih);
-                const dw = iw*scale, dh = ih*scale;
-                const dx = x + (w - dw) / 2;
-                const dy = y + (h - dh) / 2;
-                try { ctx.drawImage(img, dx, dy, dw, dh); }
-                catch { img = null; }
-            }
-            if (!img){
-                ctx.fillStyle = (colour || '#888') + '99';
-                ctx.fillRect(x, y, w, h);
-            }
-            ctx.strokeStyle = colour || '#fff';
-            ctx.lineWidth = 6;
-            ctx.strokeRect(x+3, y+3, w-6, h-6);
-            }
+    const headingsH = isPure ? (SECTION_GAP + 46) : (SECTION_GAP + 46) * 2; // H2s + spacing
 
-            if (isPure){
-            drawImg(primImg, PAD, imgTop, imgW, imgH, accent);
-            } else {
-            drawImg(secImg, PAD, imgTop, imgW, imgH, spiceColour[secondary]);
-            drawImg(primImg, PAD*2 + imgW, imgTop, imgW, imgH, accent);
-            }
+    // Vertical stack:
+    // top pad + "Spice Theory" + TITLE_GAP + title + BADGES_H + AFTER_BADGES_GAP
+    // + image row (IMG_H) + TEXT_GAP + blurb + headings + body + bottom pad
+    const topBlocks = PAD + 64 + TITLE_GAP + 84 + BADGES_H + AFTER_BADGES_GAP;
+    const textBlocks = blurbH + headingsH + primH + secH;
+    const H = Math.ceil(topBlocks + IMG_H + TEXT_GAP + textBlocks + PAD);
 
-            // Blurb and descriptions
-            const blurb = resultBlurb.textContent || '';
-            let y = imgTop + imgH + 36;
-            ctx.fillStyle = '#cfd2dc';
-            ctx.font = '600 34px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            y = wrapText(ctx, blurb, PAD, y, W - PAD*2, 44);
+    // ---- Build canvas with computed height
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
 
-            ctx.fillStyle = '#fff';
-            ctx.font = '800 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            y += 22;
-            ctx.fillText(`Primary, ${pMeta?.name || cap(primary)}`, PAD, y);
-            y += 46;
-            ctx.fillStyle = '#e8e9ef';
-            ctx.font = '400 30px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            y = wrapText(ctx, DATA.descriptions[primary] || '', PAD, y, W - PAD*2, 40);
+    // Background
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#111217');
+    g.addColorStop(1, '#1b1d27');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
-            if (!isPure){
-            ctx.fillStyle = '#fff';
-            ctx.font = '800 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            y += 22;
-            ctx.fillText(`Secondary, ${sMeta?.name || cap(secondary)}`, PAD, y);
-            y += 46;
-            ctx.fillStyle = '#e8e9ef';
-            ctx.font = '400 30px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            y = wrapText(ctx, DATA.descriptions[secondary] || '', PAD, y, W - PAD*2, 40);
-            }
+    // Accent colours
+    const spiceColour = { posh:'#000000', baby:'#ff7ab6', sporty:'#2b6eff', ginger:'#ff7b00', scary:'#f0e857' };
+    const accent = spiceColour[primary] || '#6a5cff';
 
-            // Tiny mark
-            ctx.fillStyle = 'rgba(255,255,255,0.7)';
-            ctx.font = '600 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-            ctx.fillText('spice.theory', PAD, H - PAD + 8);
+    // Title block
+    ctx.fillStyle = '#fff';
+    ctx.textBaseline = 'top';
+    ctx.font = '700 64px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    ctx.fillText('Spice Theory', PAD, PAD);
 
-            // Blob out
-            return new Promise(resolve => {
-            canvas.toBlob(b => resolve(b), 'image/png', 0.95);
-            });
-        }
+    ctx.font = fTitle;
+    ctx.fillStyle = accent;
+    ctx.fillText(title, PAD, PAD + TITLE_GAP);
+
+    // Badges
+    ctx.font = '700 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    const badgeY = PAD + TITLE_GAP + 100;
+    function badge(text, x){
+        const padX = 18, padY = 10, h = 48, r = 999;
+        const w = ctx.measureText(text).width + padX * 2;
+        ctx.fillStyle = 'rgba(255,255,255,0.12)';
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x + r, badgeY);
+        ctx.lineTo(x + w - r, badgeY);
+        ctx.quadraticCurveTo(x + w, badgeY, x + w, badgeY + r);
+        ctx.lineTo(x + w, badgeY + h - r);
+        ctx.quadraticCurveTo(x + w, badgeY + h, x + w - r, badgeY + h);
+        ctx.lineTo(x + r, badgeY + h);
+        ctx.quadraticCurveTo(x, badgeY + h, x, badgeY + h - r);
+        ctx.lineTo(x, badgeY + r);
+        ctx.quadraticCurveTo(x, badgeY, x + r, badgeY);
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#fff';
+        ctx.fillText(text, x + padX, badgeY + padY);
+        return x + w + 12;
+    }
+    let bx = PAD;
+    const pName = pMeta?.name || cap(primary);
+    const sName = sMeta?.name || cap(secondary);
+    if (isPure) {
+        bx = badge(`${pName} 100%`, bx);
+    } else {
+        bx = badge(`${sName} ${window.__lastResult.sPct}%`, bx);
+        bx = badge(`${pName} ${window.__lastResult.pPct}%`, bx);
+    }
+
+    // Image boxes (side-by-side or single)
+    const imgTop = badgeY + AFTER_BADGES_GAP + 48; // keep badges clear
+    const imgW = isPure ? (W - PAD * 2) : Math.floor((W - PAD * 3) / 2);
+
+    // Replace existing drawImg with this "contain" version
+    async function drawImg(img, x, y, w, h, colour){
+    const INNER_PAD = 18;                 // space between photo and the frame
+    const fx = x + INNER_PAD;
+    const fy = y + INNER_PAD;
+    const fw = w - INNER_PAD * 2;
+    const fh = h - INNER_PAD * 2;
+
+    // background panel
+    const ctxRef = ctx; // uses outer ctx from buildPng
+    ctxRef.fillStyle = 'rgba(255,255,255,0.06)';
+    ctxRef.fillRect(x, y, w, h);
+
+    // draw the image fully visible inside the panel (CONTAIN)
+    if (img){
+        const iw = img.naturalWidth || img.width;
+        const ih = img.naturalHeight || img.height;
+        const scale = Math.min(fw / iw, fh / ih); // << contain, not cover
+        const dw = iw * scale;
+        const dh = ih * scale;
+        const dx = fx + (fw - dw) / 2;
+        const dy = fy + (fh - dh) / 2;
+        try { ctxRef.drawImage(img, dx, dy, dw, dh); } catch {}
+    }
+
+    // frame / border
+    ctxRef.strokeStyle = colour || '#fff';
+    ctxRef.lineWidth = 6;
+    ctxRef.strokeRect(x + 3, y + 3, w - 6, h - 6);
+    }
+
+
+    const primImg = await loadImage(pMeta?.image);
+    const secImg  = isPure ? null : await loadImage(sMeta?.image);
+
+    if (isPure){
+        await drawImg(primImg, PAD, imgTop, imgW, IMG_H, accent);
+    } else {
+        await drawImg(secImg, PAD, imgTop, imgW, IMG_H, spiceColour[secondary]);
+        await drawImg(primImg, PAD*2 + imgW, imgTop, imgW, IMG_H, accent);
+    }
+
+    // Text starts strictly BELOW the image row
+    let y = imgTop + IMG_H + TEXT_GAP;
+
+    // Blurb
+    ctx.fillStyle = '#cfd2dc';
+    ctx.font = fBody1;
+    y = wrapText(ctx, blurb, PAD, y, textWidth, 44);
+
+    // Primary heading + body
+    ctx.fillStyle = '#fff';
+    ctx.font = fH2;
+    y += SECTION_GAP;
+    ctx.fillText(`Primary, ${pName}`, PAD, y);
+    y += 46;
+
+    ctx.fillStyle = '#e8e9ef';
+    ctx.font = fBody2;
+    y = wrapText(ctx, primaryText, PAD, y, textWidth, 40);
+
+    // Secondary heading + body (if any)
+    if (!isPure){
+        ctx.fillStyle = '#fff';
+        ctx.font = fH2;
+        y += SECTION_GAP;
+        ctx.fillText(`Secondary, ${sName}`, PAD, y);
+        y += 46;
+
+        ctx.fillStyle = '#e8e9ef';
+        ctx.font = fBody2;
+        y = wrapText(ctx, secondaryText, PAD, y, textWidth, 40);
+    }
+
+    // Tiny mark
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '600 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+    ctx.fillText('spice.theory', PAD, H - PAD + 8);
+
+    // Output
+    return new Promise(resolve => {
+        canvas.toBlob(b => resolve(b), 'image/png', 0.95);
+    });
+    }
+
 
         try{
             const blob = await buildPng();

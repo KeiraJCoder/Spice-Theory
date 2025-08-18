@@ -1,10 +1,10 @@
 {
-  "spices": [
-    { "key": "posh",   "name": "Posh",   "colorClass": "posh",   "tagline": "Elegance, standards, quiet authority", "image": "https://wardrobetrendsfashion.com/wp-content/uploads/2014/04/WTFSG-spice-girls-posh-world-leopard-prints.jpg" },
-    { "key": "baby",   "name": "Baby",   "colorClass": "baby",   "tagline": "Warmth, care, joyful charm",          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThaIqSFpuMuKk3O520I-mGPC4uefrJsBbVTSjUXAhPvXOgFQ_gROQ9odRo-IhRbt1PZH0&usqp=CAU" },
-    { "key": "sporty", "name": "Sporty", "colorClass": "sporty", "tagline": "Drive, stamina, momentum",            "image": "https://i.pinimg.com/564x/ca/51/76/ca51765f5ef981dacf2dbaf6d3da50f4.jpg" },
-    { "key": "ginger", "name": "Ginger", "colorClass": "ginger", "tagline": "Conviction, culture, visibility",     "image": "https://www.mediastorehouse.co.uk/p/767/geri-halliwell-spice-girls-21382208.jpg.webp" },
-    { "key": "scary",  "name": "Scary",  "colorClass": "scary",  "tagline": "Boldness, intensity, presence",       "image": "https://i.pinimg.com/736x/16/40/16/16401697c1fa40e2d2a5f4c7f1d5f012.jpg" }
+"spices": [
+    { "key": "posh",   "name": "Posh",   "colorClass": "posh",   "tagline": "Elegance, standards, quiet authority", "image": "./assets/posh.jpg" },
+    { "key": "baby",   "name": "Baby",   "colorClass": "baby",   "tagline": "Warmth, care, joyful charm",           "image": "./assets/baby.avif" },
+    { "key": "sporty", "name": "Sporty", "colorClass": "sporty", "tagline": "Drive, stamina, momentum",             "image": "./assets/sporty.jpg" },  
+    { "key": "ginger", "name": "Ginger", "colorClass": "ginger", "tagline": "Conviction, culture, visibility",      "image": "./assets/ginger.webp" },
+    { "key": "scary",  "name": "Scary",  "colorClass": "scary",  "tagline": "Boldness, intensity, presence",        "image": "./assets/scary.jpg" }
   ],
 
   "descriptions": {
