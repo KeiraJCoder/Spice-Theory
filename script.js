@@ -528,13 +528,16 @@
 
     // Accent colours
     const spiceColour = { posh:'#000000', baby:'#ff7ab6', sporty:'#2b6eff', ginger:'#ff7b00', scary:'#f0e857' };
-    const accent = spiceColour[primary] || '#6a5cff';
+    // pick colour by the name that appears first in the title
+    const dominantKey = (primary === secondary) ? primary : secondary;
+    const accent = spiceColour[dominantKey] || '#6a5cff';
+
 
     // Title block
     ctx.fillStyle = '#fff';
     ctx.textBaseline = 'top';
     ctx.font = '700 64px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-    ctx.fillText('Spice Theory', PAD, PAD);
+    ctx.fillText('https://keirajcoder.github.io/Spice-Theory.', PAD, PAD);
 
     ctx.font = fTitle;
     ctx.fillStyle = accent;
