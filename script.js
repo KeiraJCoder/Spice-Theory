@@ -1,17 +1,22 @@
-/* script.js - Spice Theory Quiz (simplified, fixed percentages)
-   - Loads ./data/archetypes.json
-   - Randomises questions per session and options per render
-   - Editable selections; scoring at end
-   - Bonus appears ONLY if top two are exactly tied after main questions
-   - Bonus choices are restricted to the two tied spices
-   - Results show Secondary first, then Primary
-   - Percentages are computed from RAW counts (main + bonus), no tie-break nudges
-   - Result blocks show an image for Primary and Secondary based on DATA.spices[*].image
-*/
-(() => {
-  // --------------------------
-  // DOM
-  // --------------------------
+    /* ============================================================================
+    Spice Theory – script.js (clean, commented)
+    - Loads ./data/archetypes.json
+    - Shuffles questions (once per run) and options (each render)
+    - Lets users change answers freely (Back/Next/Skip)
+    - If (and only if) the top two are EXACTLY tied, a bonus round appears
+        limited to those two spices; otherwise results show immediately
+    - Percentages are based on RAW counts (main + bonus). No tie nudges.
+    - Results show Secondary first, then Primary, with images.
+    - "Save Result" renders a PNG that:
+        • uses the correct dominant-title color
+        • contains both images in fixed boxes (no overlap)
+        • expands canvas height to fit all text (no clipping)
+    ============================================================================ */
+
+    (() => {
+    // ---------------------------------------------------------------------------
+    // DOM lookups
+    // ---------------------------------------------------------------------------
     const bar          = document.getElementById('bar');
     const progressText = document.getElementById('progressText');
 
@@ -35,36 +40,42 @@
     const primaryDesc  = document.getElementById('primaryDesc');
     const secondaryDesc= document.getElementById('secondaryDesc');
 
-    // --------------------------
-    // STATE
-    // --------------------------
+    // ---------------------------------------------------------------------------
+    // State
+    // ---------------------------------------------------------------------------
     let DATA = null;
 
-    let questions = [];      // shuffled DATA.questions
-    let answers   = [];      // answers[i] = spiceKey | null
+    let questions = [];   // shuffled questions
+    let answers   = [];   // answers[i] = spiceKey | null
     let index     = 0;
 
-    let bonusQuestions = []; // filtered to tied spices, shuffled
-    let bonusAnswers   = []; // bonusAnswers[i] = spiceKey | null
+    let bonusQuestions = [];
+    let bonusAnswers   = [];
     let bIndex         = 0;
     let inBonus        = false;
 
-    // --------------------------
-    // UTIL
-    // --------------------------
-    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+    // ---------------------------------------------------------------------------
+    // Utilities
+    // ---------------------------------------------------------------------------
+    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+    const SPICE_COLOUR = {
+        posh:   '#000000',
+        baby:   '#ff7ab6',
+        sporty: '#2b6eff',
+        ginger: '#ff7b00',
+        scary:  '#f0e857'
+    };
 
     function shuffle(arr){
-        for (let i = arr.length - 1; i > 0; i--){
+        for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
         }
         return arr;
     }
 
-    function setHidden(el, flag){
-        el.classList.toggle('hidden', !!flag);
-    }
+    function setHidden(el, flag){ el.classList.toggle('hidden', !!flag); }
 
     function orderScores(obj){
         return Object.entries(obj)
@@ -72,7 +83,7 @@
         .sort((a, b) => b.score - a.score);
     }
 
-    // earliest leaning wins a tie (deterministic)
+    // Earliest leaning wins a tie (deterministic)
     function firstAppearance(candidates, exclude){
         for (let i = 0; i < answers.length; i++){
         const s = answers[i];
@@ -92,9 +103,9 @@
         progressText.textContent = `Question ${current} of ${total}`;
     }
 
-    // --------------------------
-    // RENDER
-    // --------------------------
+    // ---------------------------------------------------------------------------
+    // Rendering (main + bonus)
+    // ---------------------------------------------------------------------------
     function renderQuestion(i){
         const q = questions[i];
         qLegend.textContent = q.text;
@@ -176,9 +187,9 @@
         updateProgress();
     }
 
-  // --------------------------
-  // FLOW
-  // --------------------------
+    // ---------------------------------------------------------------------------
+    // Flow
+    // ---------------------------------------------------------------------------
     function goNext(){
         if (answers[index] == null) return;
         if (index < questions.length - 1){
@@ -207,35 +218,33 @@
     }
 
     function startBonus(tieSpices){
-    inBonus = true;
+        inBonus = true;
 
-    // Restrict every bonus question to ONLY the tied spices
-    let fullPool = DATA.bonus
+        // Limit every bonus question to ONLY the tied spices
+        const pool = DATA.bonus
         .map(q => ({
-        text: q.text,
-        options: q.options.filter(o => tieSpices.includes(o.spice))
+            text: q.text,
+            options: q.options.filter(o => tieSpices.includes(o.spice))
         }))
         .filter(q => q.options.length >= 2);
 
-    // Shuffle and take a random selection (e.g. 3 to 5 questions)
-    shuffle(fullPool);
-    const numToUse = Math.min(5, Math.max(3, Math.floor(Math.random() * 5) + 3)); 
-    bonusQuestions = fullPool.slice(0, numToUse);
+        shuffle(pool);
+        const numToUse = Math.min(5, Math.max(3, Math.floor(Math.random() * 5) + 3));
+        bonusQuestions = pool.slice(0, numToUse);
 
-    if (bonusQuestions.length === 0){
+        if (!bonusQuestions.length){
         inBonus = false;
-        showResult(); // nothing to ask - go straight to result with deterministic resolver
+        showResult(); // nothing to ask – resolve deterministically
         return;
+        }
+
+        bonusAnswers = Array(bonusQuestions.length).fill(null);
+        bIndex = 0;
+
+        setHidden(quizSec, true);
+        setHidden(bonusSec, false);
+        renderBonusQuestion(bIndex);
     }
-
-    bonusAnswers = Array(bonusQuestions.length).fill(null);
-    bIndex = 0;
-
-    setHidden(quizSec, true);
-    setHidden(bonusSec, false);
-    renderBonusQuestion(bIndex);
-    }
-
 
     function bonusNext(){
         if (bonusAnswers[bIndex] == null) return;
@@ -246,19 +255,18 @@
         return;
         }
 
-        // Apply bonus picks into scores used for ORDERING (NOT for % display)
+        // Use main scores + bonus picks to ORDER (not for % display)
         const scores = tallyScores();
         bonusAnswers.forEach(s => { if (s) scores[s] = (scores[s] || 0) + 1; });
 
-        // Resolve only between the two tied spices
+        // If still tied, break by earliest appearance during the main round
         const ordered = orderScores(scores);
         const topScore = ordered[0].score;
         const topTies = ordered.filter(s => s.score === topScore).map(s => s.key);
 
         if (topTies.length > 1){
-        // Still tied after bonus - pick by earliest appearance in the main answers
         const pick = firstAppearance(topTies);
-        scores[pick] += 0.0001; // microscopic nudge to break sort tie without affecting % display
+        scores[pick] += 0.0001; // microscopic nudge to break the sort tie
         }
 
         showResult(scores);
@@ -276,10 +284,9 @@
         renderQuestion(index);
     }
 
-    // --------------------------
-    // SCORING
-    // --------------------------
-    // Scores from MAIN answers only
+    // ---------------------------------------------------------------------------
+    // Scoring
+    // ---------------------------------------------------------------------------
     function tallyScores(){
         const scores = {};
         DATA.spices.forEach(s => { scores[s.key] = 0; });
@@ -287,41 +294,29 @@
         return scores;
     }
 
-    // RAW integer counts from MAIN + BONUS, no nudges (used for % display)
     function rawCounts(){
         const counts = {};
         DATA.spices.forEach(s => { counts[s.key] = 0; });
-
-        // main answers
         answers.forEach(a => { if (a) counts[a] += 1; });
-
-        // bonus answers (if any)
         if (Array.isArray(bonusAnswers)){
         bonusAnswers.forEach(a => { if (a) counts[a] += 1; });
         }
         return counts;
     }
 
-    // Return [topKey, secondKey] ONLY if there is an exact tie for first place after main questions
+    // Return [top, second] ONLY if top two are EXACTLY tied after main round
     function computeAndCheckTies(){
         const scores  = tallyScores();
         const ordered = orderScores(scores);
-
         if (!ordered.length) return null;
-
-        const top     = ordered[0];
-        const second  = ordered[1];
-
-        // Only trigger bonus if the top two are EXACTLY tied
-        if (second && top.score === second.score){
-        return [top.key, second.key];
-        }
-        return null;
+        const top    = ordered[0];
+        const second = ordered[1];
+        return (second && top.score === second.score) ? [top.key, second.key] : null;
     }
 
-    // --------------------------
-    // RESULTS
-    // --------------------------
+    // ---------------------------------------------------------------------------
+    // Results
+    // ---------------------------------------------------------------------------
     function specialName(primary, secondary){
         if (primary === 'posh'   && secondary === 'posh')   return 'True Posh';
         if (primary === 'baby'   && secondary === 'baby')   return 'All Baby';
@@ -332,8 +327,8 @@
     }
 
     function showResult(preComputed){
-        // 1) ORDERING: use possibly nudged scores to decide primary and secondary
-        const scores  = preComputed || tallyScores(); // may have tiny nudge only to break sort
+        // ORDERING uses possibly nudged scores to break ties deterministically
+        const scores  = preComputed || tallyScores();
         const ordered = orderScores(scores);
 
         let primary   = ordered[0]?.key ?? 'posh';
@@ -342,21 +337,16 @@
         const pMeta = DATA.spices.find(s => s.key === primary);
         const sMeta = DATA.spices.find(s => s.key === secondary);
 
-        // 2) PERCENTAGES from RAW counts (main + bonus), NO nudges
+        // PERCENTAGES from RAW counts (main + bonus), NO nudges
         const raw = rawCounts();
         const totalAnswered = Object.values(raw).reduce((a, b) => a + b, 0) || 1;
-        const pct = x => Math.round((x / totalAnswered) * 100);
+        const pct = (x) => Math.round((x / totalAnswered) * 100);
 
         // Pure result = ONLY one spice scored at all
         const isPure = (ordered[1]?.score ?? 0) === 0;
-
-        // If pure, collapse to one card and force 100%
         const pPct = isPure ? 100 : pct(raw[primary]   || 0);
         const sPct = isPure ? 0   : pct(raw[secondary] || 0);
-
-        if (isPure){
-        secondary = primary; // for specialName + blurb key
-        }
+        if (isPure) secondary = primary; // unify for blurb/special title
 
         const comboKey = `${primary}:${secondary}`;
         const blurb    = DATA.resultBlurbs[comboKey] || '';
@@ -373,25 +363,15 @@
             `<span class="badge pill"><strong>${pMeta.name} ${pPct}%</strong></span>`;
         }
 
-        // Titles and copy
+        // Text content
         resultTitle.textContent = title;
         resultBlurb.textContent = blurb;
-
         primaryDesc.textContent   = DATA.descriptions[primary];
         secondaryDesc.textContent = DATA.descriptions[secondary];
 
-        // buttons
+        // Buttons
         const retakeBtn = document.getElementById('retakeBtn');
         const shareBtn  = document.getElementById('shareBtn');
-
-        function buildShareURL(primary, secondary, pPct, sPct){
-        const url = new URL(location.origin + location.pathname);
-        url.searchParams.set('primary', primary);
-        url.searchParams.set('secondary', secondary);
-        url.searchParams.set('ppct', String(pPct));
-        url.searchParams.set('spct', String(sPct));
-        return url.toString();
-        }
 
         window.__lastResult = { primary, secondary, pPct, sPct };
 
@@ -403,276 +383,249 @@
         startQuiz?.(DATA);
         };
 
-        const nameOf = k => (DATA.spices.find(s => s.key === k)?.name ?? k);
-        // Simple "Save as PNG" share, no Web Share API
-        shareBtn.onclick = async () => {
-        const res = window.__lastResult;
-        if (!res) { alert('Take the quiz first'); return; }
+        // ----------------------
+        // SAVE RESULT → PNG
+        // ----------------------
 
-        // Brand colours per spice
-        const spiceColour = {
-            posh:   '#000000',
-            baby:   '#ff7ab6',
-            sporty: '#2b6eff',
-            ginger: '#ff7b00',
-            scary:  '#f0e857'
-        };
-
-        // Small helpers
-        // --- REPLACE THESE HELPERS + buildPng IN script.js ---
-
-    function wrapText(ctx, text, x, y, maxWidth, lineHeight){
-    const words = String(text || '').split(/\s+/);
-    let line = '', lines = [];
-    for (const w of words){
-        const test = line ? line + ' ' + w : w;
-        if (ctx.measureText(test).width > maxWidth && line){
-        lines.push(line); line = w;
-        } else {
-        line = test;
+        // Shared canvas helpers (centralized to avoid duplication)
+        function wrapText(ctx, text, x, y, maxWidth, lineHeight){
+        const words = String(text || '').split(/\s+/);
+        let line = '', lines = [];
+        for (const w of words){
+            const test = line ? line + ' ' + w : w;
+            if (ctx.measureText(test).width > maxWidth && line){
+            lines.push(line); line = w;
+            } else {
+            line = test;
+            }
         }
-    }
-    if (line) lines.push(line);
-    lines.forEach((ln, i) => ctx.fillText(ln, x, y + i * lineHeight));
-    return y + lines.length * lineHeight;
-    }
-
-    function measureTextBlock(ctx, text, maxWidth, lineHeight){
-    const words = String(text || '').split(/\s+/);
-    let line = '', lines = 0;
-    for (const w of words){
-        const test = line ? line + ' ' + w : w;
-        if (ctx.measureText(test).width > maxWidth && line){
-        lines++; line = w;
-        } else {
-        line = test;
+        if (line) lines.push(line);
+        lines.forEach((ln, i) => ctx.fillText(ln, x, y + i * lineHeight));
+        return y + lines.length * lineHeight;
         }
-    }
-    if (line) lines++;
-    return lines * lineHeight;
-    }
 
-    function loadImage(src){
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = () => resolve(img);
-        img.onerror = () => resolve(null);
-        img.src = src || '';
-    });
-    }
+        function measureTextBlock(ctx, text, maxWidth, lineHeight){
+        const words = String(text || '').split(/\s+/);
+        let line = '', lines = 0;
+        for (const w of words){
+            const test = line ? line + ' ' + w : w;
+            if (ctx.measureText(test).width > maxWidth && line){
+            lines++; line = w;
+            } else {
+            line = test;
+            }
+        }
+        if (line) lines++;
+        return lines * lineHeight;
+        }
 
-    async function buildPng(){
-    // ---- Layout constants
-    const W = 1080;                 // canvas width
-    const PAD = 56;                 // outer padding
-    const TITLE_GAP = 78;           // gap under "Spice Theory"
-    const BADGES_H = 64;            // visual space for badges row
-    const AFTER_BADGES_GAP = 32;    // gap below badges before images
-    const IMG_H = 520;              // fixed image-box height
-    const IMG_GAP = PAD;            // gap between the two images
-    const TEXT_GAP = 36;            // gap below images before text
-    const SECTION_GAP = 22;         // gap between headings and body
+        function loadImage(src){
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            img.src = src || '';
+        });
+        }
 
-    // ---- Fonts used for measurement
-    const fTitle = '800 84px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-    const fH2    = '800 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-    const fBody1 = '600 34px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-    const fBody2 = '400 30px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+        async function buildPng(){
+        // ---- Layout constants
+        const W = 1080;                 // canvas width
+        const PAD = 56;                 // outer padding
+        const TITLE_GAP = 78;           // gap under "Spice Theory"
+        const BADGES_H = 64;            // visual space for badges row
+        const AFTER_BADGES_GAP = 32;    // gap below badges before images
+        const IMG_H = 520;              // fixed image-box height
+        const TEXT_GAP = 36;            // gap below images before text
+        const SECTION_GAP = 22;         // gap between headings and body
 
-    // ----- Figure out current result bits already computed by showResult()
-    const { primary, secondary, pPct, sPct } = window.__lastResult || {};
-    const pMeta = DATA.spices.find(s => s.key === primary);
-    const sMeta = DATA.spices.find(s => s.key === secondary);
-    const isPure = sPct === 0;
+        // Fonts
+        const fTitle = '800 84px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+        const fH2    = '800 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+        const fBody1 = '600 34px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+        const fBody2 = '400 30px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
 
-    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
-    const title = (primary === secondary)
-        ? ({ posh:'True Posh', baby:'All Baby', sporty:'Hard Sporty', ginger:'Full Ginger', scary:'Max Scary' }[primary] || cap(primary))
-        : `${cap(secondary)} ${cap(primary)}`;
+        const { primary, secondary, pPct, sPct } = window.__lastResult || {};
+        const pMeta = DATA.spices.find(s => s.key === primary);
+        const sMeta = DATA.spices.find(s => s.key === secondary);
+        const pure  = sPct === 0;
 
-    const blurb = resultBlurb.textContent || '';
-    const primaryText = DATA.descriptions[primary]   || '';
-    const secondaryText = isPure ? '' : (DATA.descriptions[secondary] || '');
+        const titleText = (primary === secondary)
+            ? ({ posh:'True Posh', baby:'All Baby', sporty:'Hard Sporty', ginger:'Full Ginger', scary:'Max Scary' }[primary] || cap(primary))
+            : `${cap(secondary)} ${cap(primary)}`;
 
-    // ---- Measure text to compute required height
-    const measureCtx = document.createElement('canvas').getContext('2d');
-    const textWidth = W - PAD * 2;
+        const blurb  = resultBlurb.textContent || '';
+        const pText  = DATA.descriptions[primary]   || '';
+        const sText  = pure ? '' : (DATA.descriptions[secondary] || '');
 
-    measureCtx.font = fBody1;
-    const blurbH = measureTextBlock(measureCtx, blurb, textWidth, 44);
+        // Measure text to compute the *required* height
+        const measureCtx = document.createElement('canvas').getContext('2d');
+        const textWidth  = W - PAD * 2;
 
-    measureCtx.font = fBody2;
-    const primH  = measureTextBlock(measureCtx, primaryText, textWidth, 40);
-    const secH   = isPure ? 0 : measureTextBlock(measureCtx, secondaryText, textWidth, 40);
+        measureCtx.font = fBody1;
+        const blurbH = measureTextBlock(measureCtx, blurb, textWidth, 44);
 
-    const headingsH = isPure ? (SECTION_GAP + 46) : (SECTION_GAP + 46) * 2; // H2s + spacing
+        measureCtx.font = fBody2;
+        const primH  = measureTextBlock(measureCtx, pText, textWidth, 40);
+        const secH   = pure ? 0 : measureTextBlock(measureCtx, sText, textWidth, 40);
 
-    // Vertical stack:
-    // top pad + "Spice Theory" + TITLE_GAP + title + BADGES_H + AFTER_BADGES_GAP
-    // + image row (IMG_H) + TEXT_GAP + blurb + headings + body + bottom pad
-    const topBlocks = PAD + 64 + TITLE_GAP + 84 + BADGES_H + AFTER_BADGES_GAP;
-    const textBlocks = blurbH + headingsH + primH + secH;
-    const H = Math.ceil(topBlocks + IMG_H + TEXT_GAP + textBlocks + PAD);
+        const headingsH = pure ? (SECTION_GAP + 46) : (SECTION_GAP + 46) * 2;
+        const topBlocks = PAD + 64 + TITLE_GAP + 84 + BADGES_H + AFTER_BADGES_GAP;
+        const textBlocks = blurbH + headingsH + primH + secH;
+        const H = Math.ceil(topBlocks + IMG_H + TEXT_GAP + textBlocks + PAD);
 
-    // ---- Build canvas with computed height
-    const canvas = document.createElement('canvas');
-    canvas.width = W; canvas.height = H;
-    const ctx = canvas.getContext('2d');
+        // Canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = W; canvas.height = H;
+        const ctx = canvas.getContext('2d');
 
-    // Background
-    const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, '#111217');
-    g.addColorStop(1, '#1b1d27');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+        // Background
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, '#111217');
+        g.addColorStop(1, '#1b1d27');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
-    // Accent colours
-    const spiceColour = { posh:'#000000', baby:'#ff7ab6', sporty:'#2b6eff', ginger:'#ff7b00', scary:'#f0e857' };
-    // pick colour by the name that appears first in the title
-    const dominantKey = (primary === secondary) ? primary : secondary;
-    const accent = spiceColour[dominantKey] || '#6a5cff';
+        // Accent color = dominant (the first word in the visible title)
+        const dominantKey = (primary === secondary) ? primary : secondary;
+        const accent = SPICE_COLOUR[dominantKey] || '#6a5cff';
 
-
-    // Title block
-    ctx.fillStyle = '#fff';
-    ctx.textBaseline = 'top';
-    ctx.font = '700 64px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-    ctx.fillText('https://keirajcoder.github.io/Spice-Theory.', PAD, PAD);
-
-    ctx.font = fTitle;
-    ctx.fillStyle = accent;
-    ctx.fillText(title, PAD, PAD + TITLE_GAP);
-
-    // Badges
-    ctx.font = '700 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-    const badgeY = PAD + TITLE_GAP + 100;
-    function badge(text, x){
-        const padX = 18, padY = 10, h = 48, r = 999;
-        const w = ctx.measureText(text).width + padX * 2;
-        ctx.fillStyle = 'rgba(255,255,255,0.12)';
-        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(x + r, badgeY);
-        ctx.lineTo(x + w - r, badgeY);
-        ctx.quadraticCurveTo(x + w, badgeY, x + w, badgeY + r);
-        ctx.lineTo(x + w, badgeY + h - r);
-        ctx.quadraticCurveTo(x + w, badgeY + h, x + w - r, badgeY + h);
-        ctx.lineTo(x + r, badgeY + h);
-        ctx.quadraticCurveTo(x, badgeY + h, x, badgeY + h - r);
-        ctx.lineTo(x, badgeY + r);
-        ctx.quadraticCurveTo(x, badgeY, x + r, badgeY);
-        ctx.fill(); ctx.stroke();
+        // Title block
         ctx.fillStyle = '#fff';
-        ctx.fillText(text, x + padX, badgeY + padY);
-        return x + w + 12;
-    }
-    let bx = PAD;
-    const pName = pMeta?.name || cap(primary);
-    const sName = sMeta?.name || cap(secondary);
-    if (isPure) {
-        bx = badge(`${pName} 100%`, bx);
-    } else {
-        bx = badge(`${sName} ${window.__lastResult.sPct}%`, bx);
-        bx = badge(`${pName} ${window.__lastResult.pPct}%`, bx);
-    }
+        ctx.textBaseline = 'top';
+        ctx.font = '700 64px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+        ctx.fillText('Spice Theory', PAD, PAD);
 
-    // Image boxes (side-by-side or single)
-    const imgTop = badgeY + AFTER_BADGES_GAP + 48; // keep badges clear
-    const imgW = isPure ? (W - PAD * 2) : Math.floor((W - PAD * 3) / 2);
+        ctx.font = fTitle;
+        ctx.fillStyle = accent;
+        ctx.fillText(titleText, PAD, PAD + TITLE_GAP);
 
-    // Replace existing drawImg with this "contain" version
-    async function drawImg(img, x, y, w, h, colour){
-    const INNER_PAD = 18;                 // space between photo and the frame
-    const fx = x + INNER_PAD;
-    const fy = y + INNER_PAD;
-    const fw = w - INNER_PAD * 2;
-    const fh = h - INNER_PAD * 2;
+        // Badges
+        ctx.font = '700 36px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+        const badgeY = PAD + TITLE_GAP + 100;
+        function badge(text, x){
+            const padX = 18, padY = 10, h = 48, r = 999;
+            const w = ctx.measureText(text).width + padX * 2;
+            ctx.fillStyle = 'rgba(255,255,255,0.12)';
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x + r, badgeY);
+            ctx.lineTo(x + w - r, badgeY);
+            ctx.quadraticCurveTo(x + w, badgeY, x + w, badgeY + r);
+            ctx.lineTo(x + w, badgeY + h - r);
+            ctx.quadraticCurveTo(x + w, badgeY + h, x + w - r, badgeY + h);
+            ctx.lineTo(x + r, badgeY + h);
+            ctx.quadraticCurveTo(x, badgeY + h, x, badgeY + h - r);
+            ctx.lineTo(x, badgeY + r);
+            ctx.quadraticCurveTo(x, badgeY, x + r, badgeY);
+            ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#fff';
+            ctx.fillText(text, x + padX, badgeY + padY);
+            return x + w + 12;
+        }
 
-    // background panel
-    const ctxRef = ctx; // uses outer ctx from buildPng
-    ctxRef.fillStyle = 'rgba(255,255,255,0.06)';
-    ctxRef.fillRect(x, y, w, h);
+        let bx = PAD;
+        const pName = pMeta?.name || cap(primary);
+        const sName = sMeta?.name || cap(secondary);
+        if (pure) {
+            bx = badge(`${pName} 100%`, bx);
+        } else {
+            bx = badge(`${sName} ${sPct}%`, bx);
+            bx = badge(`${pName} ${pPct}%`, bx);
+        }
 
-    // draw the image fully visible inside the panel (CONTAIN)
-    if (img){
-        const iw = img.naturalWidth || img.width;
-        const ih = img.naturalHeight || img.height;
-        const scale = Math.min(fw / iw, fh / ih); // << contain, not cover
-        const dw = iw * scale;
-        const dh = ih * scale;
-        const dx = fx + (fw - dw) / 2;
-        const dy = fy + (fh - dh) / 2;
-        try { ctxRef.drawImage(img, dx, dy, dw, dh); } catch {}
-    }
+        // Image boxes (side-by-side or single)
+        const imgTop = badgeY + AFTER_BADGES_GAP + 48;
+        const imgW = pure ? (W - PAD * 2) : Math.floor((W - PAD * 3) / 2);
 
-    // frame / border
-    ctxRef.strokeStyle = colour || '#fff';
-    ctxRef.lineWidth = 6;
-    ctxRef.strokeRect(x + 3, y + 3, w - 6, h - 6);
-    }
+        async function drawImg(img, x, y, w, h, colour){
+            const INNER_PAD = 18;
+            const fx = x + INNER_PAD,  fy = y + INNER_PAD;
+            const fw = w - INNER_PAD * 2, fh = h - INNER_PAD * 2;
 
+            // background panel
+            ctx.fillStyle = 'rgba(255,255,255,0.06)';
+            ctx.fillRect(x, y, w, h);
 
-    const primImg = await loadImage(pMeta?.image);
-    const secImg  = isPure ? null : await loadImage(sMeta?.image);
+            // draw contained image (no crop; fully visible)
+            if (img){
+            const iw = img.naturalWidth || img.width;
+            const ih = img.naturalHeight || img.height;
+            const scale = Math.min(fw / iw, fh / ih); // CONTAIN
+            const dw = iw * scale, dh = ih * scale;
+            const dx = fx + (fw - dw) / 2;
+            const dy = fy + (fh - dh) / 2;
+            try { ctx.drawImage(img, dx, dy, dw, dh); } catch {}
+            }
 
-    if (isPure){
-        await drawImg(primImg, PAD, imgTop, imgW, IMG_H, accent);
-    } else {
-        await drawImg(secImg, PAD, imgTop, imgW, IMG_H, spiceColour[secondary]);
-        await drawImg(primImg, PAD*2 + imgW, imgTop, imgW, IMG_H, accent);
-    }
+            // frame / border
+            ctx.strokeStyle = colour || '#fff';
+            ctx.lineWidth = 6;
+            ctx.strokeRect(x + 3, y + 3, w - 6, h - 6);
+        }
 
-    // Text starts strictly BELOW the image row
-    let y = imgTop + IMG_H + TEXT_GAP;
+        const primImg = await loadImage(pMeta?.image);
+        const secImg  = pure ? null : await loadImage(sMeta?.image);
 
-    // Blurb
-    ctx.fillStyle = '#cfd2dc';
-    ctx.font = fBody1;
-    y = wrapText(ctx, blurb, PAD, y, textWidth, 44);
+        if (pure){
+            await drawImg(primImg, PAD, imgTop, imgW, IMG_H, accent);
+        } else {
+            await drawImg(secImg, PAD, imgTop, imgW, IMG_H, SPICE_COLOUR[secondary]);
+            await drawImg(primImg, PAD*2 + imgW, imgTop, imgW, IMG_H, accent);
+        }
 
-    // Primary heading + body
-    ctx.fillStyle = '#fff';
-    ctx.font = fH2;
-    y += SECTION_GAP;
-    ctx.fillText(`Primary, ${pName}`, PAD, y);
-    y += 46;
+        // Text starts below images
+        let y = imgTop + IMG_H + TEXT_GAP;
 
-    ctx.fillStyle = '#e8e9ef';
-    ctx.font = fBody2;
-    y = wrapText(ctx, primaryText, PAD, y, textWidth, 40);
+        // Blurb
+        ctx.fillStyle = '#cfd2dc';
+        ctx.font = fBody1;
+        y = wrapText(ctx, blurb, PAD, y, textWidth, 44);
 
-    // Secondary heading + body (if any)
-    if (!isPure){
+        // Primary section
         ctx.fillStyle = '#fff';
         ctx.font = fH2;
         y += SECTION_GAP;
-        ctx.fillText(`Secondary, ${sName}`, PAD, y);
+        ctx.fillText(`Primary, ${pName}`, PAD, y);
         y += 46;
 
         ctx.fillStyle = '#e8e9ef';
         ctx.font = fBody2;
-        y = wrapText(ctx, secondaryText, PAD, y, textWidth, 40);
-    }
+        y = wrapText(ctx, pText, PAD, y, textWidth, 40);
 
-    // Tiny mark
-    ctx.fillStyle = 'rgba(255,255,255,0.7)';
-    ctx.font = '600 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-    ctx.fillText('spice.theory', PAD, H - PAD + 8);
+        // Secondary section
+        if (!pure){
+            ctx.fillStyle = '#fff';
+            ctx.font = fH2;
+            y += SECTION_GAP;
+            ctx.fillText(`Secondary, ${sName}`, PAD, y);
+            y += 46;
 
-    // Output
-    return new Promise(resolve => {
-        canvas.toBlob(b => resolve(b), 'image/png', 0.95);
-    });
-    }
+            ctx.fillStyle = '#e8e9ef';
+            ctx.font = fBody2;
+            y = wrapText(ctx, sText, PAD, y, textWidth, 40);
+        }
 
+        // Tiny mark
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.font = '600 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
+        ctx.fillText('https://keirajcoder.github.io/Spice-Theory/', PAD, H - PAD + 8);
+
+        return new Promise(resolve => {
+            canvas.toBlob(b => resolve(b), 'image/png', 0.95);
+        });
+        }
+
+        shareBtn.onclick = async () => {
+        const res = window.__lastResult;
+        if (!res) { alert('Take the quiz first'); return; }
 
         try{
             const blob = await buildPng();
             if (!blob){ alert('Could not create PNG'); return; }
 
-            // Trigger download
-            const filename = `spice-${primary}-${secondary}.png`;
+            const filename = `spice-${res.primary}-${res.secondary}.png`;
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -682,7 +635,6 @@
             a.remove();
             setTimeout(() => URL.revokeObjectURL(url), 4000);
 
-            // Quick UX feedback
             const old = shareBtn.textContent;
             shareBtn.textContent = 'Saved PNG';
             setTimeout(() => (shareBtn.textContent = old), 1400);
@@ -692,8 +644,7 @@
         }
         };
 
-
-        // emphasise primary block, ensure secondary first
+        // Emphasise primary block; ensure Secondary first in grid
         const grid           = resultSec.querySelector('.grid');
         const primaryBlock   = primaryDesc.closest('div');
         const secondaryBlock = secondaryDesc.closest('div');
@@ -707,19 +658,18 @@
         setHidden(secondaryBlock, false);
         secondaryH3.textContent = `Secondary subtype (${sPct}%)`;
         primaryH3.textContent   = `Primary type (${pPct}%)`;
-
         if (grid && secondaryBlock !== grid.firstElementChild){
             grid.insertBefore(secondaryBlock, grid.firstElementChild);
             grid.appendChild(primaryBlock);
         }
         }
 
-        // Visual emphasis + colour per spice
+        // Primary card colour
         primaryBlock.classList.add('highlight-primary');
         primaryBlock.classList.remove('posh','baby','sporty','ginger','scary');
         primaryBlock.classList.add(pMeta?.colorClass || primary);
 
-        // insert images
+        // Insert result images (DOM view)
         function upsertImage(block, meta){
         if (!block || !meta) return;
         let img = block.querySelector('.result-img');
@@ -733,11 +683,9 @@
         img.alt = meta.name || 'Result image';
         }
         upsertImage(primaryBlock, pMeta);
-        if (!isPure){
-        upsertImage(secondaryBlock, sMeta);
-        }
+        if (!isPure) upsertImage(secondaryBlock, sMeta);
 
-        // emphasise primary copy
+        // Emphasise primary copy
         primaryDesc.innerHTML = `<strong>${primaryDesc.textContent}</strong>`;
 
         setHidden(quizSec,  true);
@@ -748,13 +696,13 @@
         progressText.textContent = 'Complete';
     }
 
-    // --------------------------
-    // INIT
-    // --------------------------
+    // ---------------------------------------------------------------------------
+    // Init
+    // ---------------------------------------------------------------------------
     function startQuiz(data){
         DATA = data;
 
-        // Warm the cache for result images
+        // Warm cache for result images
         (DATA.spices || []).forEach(s => {
         if (s.image){
             const i = new Image();
@@ -767,7 +715,6 @@
         answers = Array(questions.length).fill(null);
         index = 0;
 
-        // reset any previous bonus state
         bonusQuestions = [];
         bonusAnswers   = [];
         bIndex = 0;
@@ -781,15 +728,14 @@
         renderQuestion(index);
     }
 
-    // events
+    // Events
     nextBtn.addEventListener('click', goNext);
     backBtn.addEventListener('click', goBack);
     skipBtn.addEventListener('click', skip);
-
     bonusNextBtn.addEventListener('click', bonusNext);
     bonusBackBtn.addEventListener('click', bonusBack);
 
-    // data
+    // Data load
     fetch('./data/archetypes.json')
         .then(r => { if (!r.ok) throw new Error('Failed to load archetypes.json'); return r.json(); })
         .then(startQuiz)
@@ -797,9 +743,4 @@
         console.error(err);
         progressText.textContent = 'Error loading quiz data.';
         });
-
-    function getSpice(key){
-        return DATA?.spices?.find(s => s.key === key) || null;
-    }
-})
-();
+    })();
