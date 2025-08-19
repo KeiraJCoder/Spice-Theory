@@ -1,4 +1,4 @@
-    /* ============================================================================
+/* ============================================================================
     Spice Theory – script.js (clean, commented)
     - Loads ./data/archetypes.json
     - Shuffles questions (once per run) and options (each render)
@@ -13,7 +13,7 @@
         • expands canvas height to fit all text (no clipping)
     ============================================================================ */
 
-    (() => {
+(() => {
     // ---------------------------------------------------------------------------
     // DOM lookups
     // ---------------------------------------------------------------------------
@@ -486,9 +486,8 @@
         g.addColorStop(1, '#1b1d27');
         ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
-        // Accent color = dominant (the first word in the visible title)
-        const dominantKey = (primary === secondary) ? primary : secondary;
-        const accent = SPICE_COLOUR[dominantKey] || '#6a5cff';
+        // ***** PNG COLOR STYLING CHANGE #1: Title accent follows PRIMARY (dominant) *****
+        const accent = SPICE_COLOUR[primary] || '#6a5cff';
 
         // Title block
         ctx.fillStyle = '#fff';
@@ -539,40 +538,57 @@
         const imgTop = badgeY + AFTER_BADGES_GAP + 48;
         const imgW = pure ? (W - PAD * 2) : Math.floor((W - PAD * 3) / 2);
 
-        async function drawImg(img, x, y, w, h, colour){
-            const INNER_PAD = 18;
-            const fx = x + INNER_PAD,  fy = y + INNER_PAD;
-            const fw = w - INNER_PAD * 2, fh = h - INNER_PAD * 2;
+        // ***** PNG IMAGE FIT + FRAME COLOR CHANGES *****
+        // Use "cover" (crop) to fill the box, and color only PRIMARY's border.
+            // Replace drawImg inside buildPng() with this version
+        function drawImg(img, x, y, w, h, borderColor){
+        const INNER_PAD = 18;                 // space between photo and the frame
+        const fx = x + INNER_PAD;
+        const fy = y + INNER_PAD;
+        const fw = w - INNER_PAD * 2;
+        const fh = h - INNER_PAD * 2;
 
-            // background panel
-            ctx.fillStyle = 'rgba(255,255,255,0.06)';
-            ctx.fillRect(x, y, w, h);
+        // panel background
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fillRect(x, y, w, h);
 
-            // draw contained image (no crop; fully visible)
-            if (img){
+        // draw the image fully visible inside the panel (CONTAIN) and CLIP to the inner area
+        if (img){
             const iw = img.naturalWidth || img.width;
             const ih = img.naturalHeight || img.height;
-            const scale = Math.min(fw / iw, fh / ih); // CONTAIN
-            const dw = iw * scale, dh = ih * scale;
+            const scale = Math.min(fw / iw, fh / ih); // << contain (no overflow)
+            const dw = iw * scale;
+            const dh = ih * scale;
             const dx = fx + (fw - dw) / 2;
             const dy = fy + (fh - dh) / 2;
-            try { ctx.drawImage(img, dx, dy, dw, dh); } catch {}
-            }
 
-            // frame / border
-            ctx.strokeStyle = colour || '#fff';
-            ctx.lineWidth = 6;
-            ctx.strokeRect(x + 3, y + 3, w - 6, h - 6);
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(fx, fy, fw, fh);   // hard clip to inner box so nothing can spill
+            ctx.clip();
+            try { ctx.drawImage(img, dx, dy, dw, dh); } catch {}
+            ctx.restore();
         }
+
+        // frame / border (primary color or neutral, as you already set in the callers)
+        ctx.strokeStyle = borderColor || '#0f1116';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(x + 3, y + 3, w - 6, h - 6);
+        }
+
 
         const primImg = await loadImage(pMeta?.image);
         const secImg  = pure ? null : await loadImage(sMeta?.image);
 
         if (pure){
-            await drawImg(primImg, PAD, imgTop, imgW, IMG_H, accent);
+            // Only one image: primary gets the colored frame
+            drawImg(primImg, PAD, imgTop, imgW, IMG_H, accent);
         } else {
-            await drawImg(secImg, PAD, imgTop, imgW, IMG_H, SPICE_COLOUR[secondary]);
-            await drawImg(primImg, PAD*2 + imgW, imgTop, imgW, IMG_H, accent);
+            // Secondary (left): neutral frame
+            const neutralBorder = '#0f1116';
+            drawImg(secImg,  PAD,           imgTop, imgW, IMG_H, neutralBorder);
+            // Primary (right): colored frame (accent)
+            drawImg(primImg, PAD*2 + imgW,  imgTop, imgW, IMG_H, accent);
         }
 
         // Text starts below images
@@ -610,7 +626,7 @@
         // Tiny mark
         ctx.fillStyle = 'rgba(255,255,255,0.7)';
         ctx.font = '600 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial';
-        ctx.fillText('https://keirajcoder.github.io/Spice-Theory/', PAD, H - PAD + 8);
+        ctx.fillText('tinyurl.com/Spice-Theory', PAD, H - PAD + 8);
 
         return new Promise(resolve => {
             canvas.toBlob(b => resolve(b), 'image/png', 0.95);
@@ -743,4 +759,4 @@
         console.error(err);
         progressText.textContent = 'Error loading quiz data.';
         });
-    })();
+})();
